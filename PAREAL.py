@@ -119,3 +119,35 @@ def topup():
         print("akun anda tidak dikenal")
 
 
+#FUNCTION UNTUK BERALIH KE AKUN PREMIUM
+def premium():
+    while True:
+        username = input("Masukkan username: ")
+        pw = pwinput.pwinput("Masukkan Password: ")
+        akunAda = False
+        for user in userfree:
+                if user["username"].lower() == username:
+                    akunAda = True
+                    if user["password"] == pw:
+                        bayar = input("Apakah kamu yakin ingin beralih ke akun premium? (y/t): ").lower()
+                        if bayar == "y":
+                            if user["saldo"] < 50000:
+                                ask = input(f"Saldo anda tidak mencukupi, saldo anda sisa {user['saldo']}, apakah mau isi saldo? (y/t) :").lower()
+                                if ask == "y":
+                                    topup()
+                                elif ask == "t":
+                                    break
+                                else:
+                                    print("Invalid")
+                            elif user["saldo"] >= 50000:
+                                print("Anda beralih ke akun premium")
+                                break
+                        elif bayar == "t":
+                            break
+                        else:
+                            print("Invalid")
+                    else:
+                        print("Password yang anda masukkan salah")
+                    break
+        if not akunAda: 
+            print("akun anda tidak dikenal")
