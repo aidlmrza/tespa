@@ -56,6 +56,7 @@ def register():
                 json.dump(dataUser,sn,indent=4)
             break
 
+
 #FUNCTION UNTUK LOGIN
 def login():
     print("Silahkan Login")
