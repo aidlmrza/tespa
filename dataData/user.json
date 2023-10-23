@@ -1,0 +1,56 @@
+[
+    {
+        "username": "hisyam",
+        "password": "hisym20",
+        "saldo": 50000,
+        "privilage": "free"
+    },
+    {
+        "username": "aidil",
+        "password": "ai40",
+        "saldo": 0,
+        "privilage": "free"
+    },
+    {
+        "username": "fajar",
+        "password": "fajr60",
+        "saldo": 0,
+        "privilage": "free"
+    },
+    {
+        "username": "ezra",
+        "password": "ez52",
+        "saldo": 0,
+        "privilage": "free"
+    },
+    {
+        "username": "coba",
+        "password": "coba",
+        "saldo": 50000,
+        "privilage": "free"
+    },
+    {
+        "username": "aii",
+        "password": "23",
+        "saldo": 100000,
+        "privilage": "premium"
+    },
+    {
+        "username": "ai",
+        "password": "ai23",
+        "saldo": 0,
+        "privilage": "free"
+    },
+    {
+        "username": "hi",
+        "password": "hihi",
+        "saldo": 0,
+        "privilage": "free"
+    },
+    {
+        "username": "aidill",
+        "password": "23",
+        "saldo": 0,
+        "privilage": "free"
+    }
+]
