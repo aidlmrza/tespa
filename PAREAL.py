@@ -5,26 +5,33 @@ from prettytable import PrettyTable
 os.system('cls')
 
 
-json_path_film = 'D:/01_CODE/DDP/PraktikumDDP/TESPA/dataData/film.json'
-json_path_pay = 'D:/01_CODE/DDP/PraktikumDDP/TESPA/dataData/userpay.json'
-json_path_free = 'D:/01_CODE/DDP/PraktikumDDP/TESPA/dataData/userfree.json'
-json_path_admin = 'D:/01_CODE/DDP/PraktikumDDP/TESPA/dataData/admin.json'
+json_path_film = 'C:/Aidil/01_CODING/Semester1/PA/dataData/film.json'
+json_path_pay = 'C:/Aidil/01_CODING/Semester1/PA/dataData/userpay.json'
+json_path_free = 'C:/Aidil/01_CODING/Semester1/PA/dataData/userfree.json'
+json_path_admin = 'C:/Aidil/01_CODING/Semester1/PA/dataData/admin.json'
 with open(json_path_film,"r") as filmdata:
     film = json.loads(filmdata.read())
-with open(json_path_free,"r") as userdata:
-    userfree = json.loads(userdata.read())
-with open(json_path_pay, "r") as userdata:
-    userpay = json.loads(userdata.read())
+with open(json_path_free,"r") as userFreeData:
+    userfree = json.loads(userFreeData.read())
+with open(json_path_pay, "r") as userPayData:
+    userpay = json.loads(userPayData.read())
 with open(json_path_admin, "r") as admindata:
     admin = json.loads(admindata.read())
 
 
-def daftarFilm():
-    table = PrettyTable()
-    table.field_names = ["No","Judul Film","Genre","Waktu Release"]
+print("------------------------------------------------------------------------------")
+print("-                                                                            -")
+print("-                                   SI-FLIX                                  -")
+print("-                                                                            -")
+print("------------------------------------------------------------------------------")
+
+
+def tampilkan_daftar_film():
+    table_film = PrettyTable()
+    table_film.field_names =  ["No","Judul Film","Genre","Waktu Release"]
     for item in film:
-        table.add_row(item)
-    print(table)
+        table_film.add_row(item)
+    print(table_film)
 
 
 def register():
@@ -68,6 +75,7 @@ def login():
             if admin_acc["adminName"].lower() == username and admin_acc["pwAdmin"]==pw:
                 akunAda = True
                 print("Berhasil login sebagai admin")
+                return menu_admin()
                 break
         for user in userfree:
             if user["username"].lower() == username:
@@ -151,3 +159,97 @@ def premium():
                     break
         if not akunAda: 
             print("akun anda tidak dikenal")
+
+
+def menu_admin():
+    while True:
+        print("1. Tampilkan Daftar Film")
+        print("2. Tambah Film")
+        print("3. Ubah Film")
+        print("4. Hapus Film")
+        print("5. Keluar")
+        pilihan = input("Pilihan Anda: ")
+
+        if pilihan == "1":
+            tampilkan_daftar_film()
+        elif pilihan == "2":
+            tambah()
+        elif pilihan == "3":
+            ubah()
+        elif pilihan == "4":
+            Hapus()
+        elif pilihan == "5":
+            print("---Terima kasih telah menggunakan aplikasi.---")
+            break
+        else:
+            print("---Pilihan tidak valid. Silakan coba lagi.---")
+
+def tambah():
+    nomorMaks = max([item[0] for item in film])
+    nomorFilm = nomorMaks + 1
+    judulFilm = input("Masukkan Nama Film: ")
+    Genre = (input("Masukkan Genre: "))
+    tanggalRelease = (input("Masukkan Tanggal Release: "))
+    tambahan = [nomorFilm, judulFilm, Genre, tanggalRelease]
+    film.append(tambahan)
+    with open (json_path_film,"w") as sn:
+        json.dump(film,sn, indent=4)
+    print("------------------------Film berhasil ditambahkan.--------------------------")
+
+def ubah():
+    tampilkan_daftar_film()
+    nomorFilm = int(input("Masukkan No film yang akan diubah: "))
+    for i in range(len(film)):
+        if film[i][0] == nomorFilm:
+            judulFilm = input("Masukkan Judul Film baru: ")
+            Genre = input("Masukkan Genre Film baru: ")
+            waktuRelease = input("Masukkan waktu release Film baru: ")
+            film[i][1] = judulFilm
+            film[i][2] = Genre
+            film[i][3] = waktuRelease
+            with open (json_path_film,"w") as sn:
+                json.dump(film,sn, indent=4)
+            print("------------------------Film berhasil ubah.--------------------------")
+    else:
+        print("Maaf Perhiasan dengan ID tersebut tidak ditemukan.")
+
+def Hapus():
+    tampilkan_daftar_film()
+    nomorFilm = int(input("Masukan No Film yang akan dihapus: "))
+    ada = False
+    for i in range(len(film)):
+        if film[i][0] == nomorFilm:
+            del film[i]
+            ada = True
+            break
+    if ada:
+        for i in range(len(film)):
+            film[i][0] = i + 1
+        with open (json_path_film,"w") as sn:
+            json.dump(film,sn, indent=4)
+        print("------------------------Film berhasil Dihapus.--------------------------")
+    else:
+        print("Maaf Film dengan No tersebut tidak ditemukan.")
+
+
+while True:
+    print("==============================================================================")
+    print("|                                                                            |")
+    print("|                                                                            |")
+    print("|                                 1. Register                                |")
+    print("|                                 2. Login                                   |")
+    print("|                                 0. Keluar                                  |")
+    print("|                                                                            |")
+    print("|                                                                            |")
+    print("==============================================================================")
+    ask = input("Pilih opsi (1/2/0): ")
+    if ask == "1":
+        register()
+    elif ask == "2":
+        login()
+    elif ask == "0":
+        print("----------------------------Terima Kasih--------------------------------")
+        break
+    else:
+        print("Maaf Perhiasan dengan ID tersebut tidak ditemukan.")
+
