@@ -5,19 +5,15 @@ from prettytable import PrettyTable
 os.system('cls')
 
 
-json_path_film = 'C:/Aidil/01_CODING/Semester1/PA/dataData/film.json'
-json_path_pay = 'C:/Aidil/01_CODING/Semester1/PA/dataData/userpay.json'
-json_path_free = 'C:/Aidil/01_CODING/Semester1/PA/dataData/userfree.json'
-json_path_admin = 'C:/Aidil/01_CODING/Semester1/PA/dataData/admin.json'
+json_path_film = 'D:/01_CODE/DDP/PraktikumDDP/TESPA/dataData/film.json'
+json_path_admin = 'D:/01_CODE/DDP/PraktikumDDP/TESPA/dataData/admin.json'
+json_path_user = 'D:/01_CODE/DDP/PraktikumDDP/TESPA/dataData/user.json'
 with open(json_path_film,"r") as filmdata:
     film = json.loads(filmdata.read())
-with open(json_path_free,"r") as userFreeData:
-    userfree = json.loads(userFreeData.read())
-with open(json_path_pay, "r") as userPayData:
-    userpay = json.loads(userPayData.read())
 with open(json_path_admin, "r") as admindata:
     admin = json.loads(admindata.read())
-
+with open(json_path_user,"r") as userdata:
+    dataUser = json.loads(userdata.read())
 
 print("==============================================================================")
 print("|                                                                            |")
@@ -45,23 +41,18 @@ def register():
                 print("username sudah digunakan cobalagi yang lain")
                 notAvailable = True #VARIABLE BERUBAH MENJADI TRUE SAAT USERNAME SUDAH TIDAK TERSEDIA
                 break
-        for user in userfree:
-            if user["username"].lower() == username:
-                print("username sudah digunakan cobalagi yang lain")
-                notAvailable = True #VARIABLE BERUBAH MENJADI TRUE SAAT USERNAME SUDAH TIDAK TERSEDIA
-                break
-        for user in userpay:
+        for user in dataUser:
             if user["username"].lower() == username:
                 print("username sudah digunakan cobalagi yang lain")
                 notAvailable = True #VARIABLE BERUBAH MENJADI TRUE SAAT USERNAME SUDAH TIDAK TERSEDIA
                 break
         #JIKA USERNAME TERSEDIA DAN VARIBLENYA MASIH BERNILAI FALSE MAKA AKAN BERHASIL MENAMBAHKAN AKUN BARU
         if not notAvailable:
-            akun_baru = {"username": username, "password": pw, "saldo": 0}
-            userfree.append(akun_baru)
+            akun_baru = {"username": username, "password": pw, "saldo": 0, "privilage": "free"}
+            dataUser.append(akun_baru)
             print("berhasil membuat akun")
-            with open (json_path_free, "w") as sn:
-                json.dump(userfree,sn,indent=4)
+            with open (json_path_user, "w") as sn:
+                json.dump(dataUser,sn,indent=4)
             break
 
 #FUNCTION UNTUK LOGIN
@@ -76,21 +67,16 @@ def login():
                 akunAda = True
                 print("Berhasil login sebagai admin")
                 return menu_admin()
-        for user in userfree:
+        for user in dataUser:
             if user["username"].lower() == username:
                 akunAda = True#JIKA USERNAME DITEMUKAN MAKA VARIABLE AKAN MENJADI TRUE
                 if user["password"] == pw:
-                    print("berhasil login sebagai user free")
-                    return menuUserFree()
-                else:
-                    print("Password yang anda masukkan salah")
-                break
-        for user in userpay:
-            if user["username"].lower() == username:
-                akunAda = True#JIKA USERNAME DITEMUKAN MAKA VARIABLE AKAN MENJADI TRUE
-                if user["password"] == pw:
-                    print("berhasil login sebagai user premium")
-                    return menuUserPremium()
+                    if user["privilage"] == "free":
+                        print("\nBerhasil login sebagai user Free")
+                        return menuUserFree()
+                    elif user["privilage"] == "premium":
+                        print("\nBerhasil login sebagai user Premium")
+                        return menuUserPremium()
                 else:
                     print("Password yang anda masukkan salah")
                 break
@@ -148,29 +134,17 @@ def userFree():
 def topup():
     username = input("Masukkan username: ")
     pw = pwinput.pwinput("Masukkan Password: ")
-    for user in userfree:
+    for user in dataUser:
             if user["username"].lower() == username:
                 if user["password"] == pw:
                     saldo = int(input("Masukkan jumlah saldo yang ingin diisi: "))
                     user["saldo"]+=saldo
                     akunAda = True
-                    with open (json_path_free, "w") as sn:
-                        json.dump(userfree, sn, indent=4)
+                    with open (json_path_user, "w") as sn:
+                        json.dump(dataUser, sn, indent=4)
                 else:
                     print("Password yang anda masukkan salah")
-                
                 break
-    for user in userpay:
-        if user["username"].lower() == username:
-            if user["password"] == pw:
-                saldo = int(input("Masukkan jumlah saldo yang ingin diisi: "))
-                user["saldo"]+=saldo
-                akunAda = True
-                with open (json_path_pay, "w") as sn:
-                    json.dump(userpay,sn,indent=4)
-            else:
-                print("Password yang anda masukkan salah")
-            break
     if not akunAda: 
         print("akun anda tidak dikenal")
 
@@ -185,7 +159,7 @@ def premium():
     username = input("Masukkan username: ")
     pw = pwinput.pwinput("Masukkan Password: ")
     akunAda = False
-    for user in userfree:
+    for user in dataUser:
             if user["username"].lower() == username:
                 akunAda = True
                 if user["password"] == pw:
@@ -200,15 +174,9 @@ def premium():
                             else:
                                 print("Invalid")
                         elif user["saldo"] >= 50000:
-                            akunPremium = {"username": user["username"], "password": user["password"], "saldo": user["saldo"]}
-                            userpay.append(akunPremium)
-                            with open (json_path_pay,"w") as sn:
-                                json.dump(userpay,sn,indent=4)
-                            del user["username"]
-                            del user["password"]
-                            del user["saldo"]
-                            with open (json_path_free,"w") as sn:
-                                json.dump(userfree,sn,indent=4)
+                            user["privilage"] = "premium"
+                            with open (json_path_user,"w") as sn:
+                                json.dump(dataUser,sn,indent=4)
                             print("Anda beralih ke akun premium")
                             break
                     elif bayar == "t":
@@ -361,4 +329,3 @@ while True:
         break
     else:
         print("Maaf input anda invalid, coba untuk input sesuai pilihan yang ada.")
-
