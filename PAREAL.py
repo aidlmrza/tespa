@@ -15,6 +15,7 @@ with open(json_path_admin, "r") as admindata:
 with open(json_path_user,"r") as userdata:
     dataUser = json.loads(userdata.read())
 
+
 print("==============================================================================")
 print("|                                                                            |")
 print("|                                   SI-FLIX                                  |")
@@ -34,7 +35,7 @@ def register():
     print("Silahkan lakukan Registrasi")
     while True:
         username = input("Masukkan username: ").lower()
-        pw = pwinput.pwinput("Masukkan password: ")
+        password = pwinput.pwinput("Masukkan password: ")
         notAvailable = False #VARIABLE YANG DIGUNAKAN UNTUK MENGECEK APAKAH USERNAME TERDAFTAR ATAU TIDAK
         for admin_acc in admin:
             if admin_acc["adminName"].lower() == username:
@@ -48,7 +49,7 @@ def register():
                 break
         #JIKA USERNAME TERSEDIA DAN VARIBLENYA MASIH BERNILAI FALSE MAKA AKAN BERHASIL MENAMBAHKAN AKUN BARU
         if not notAvailable:
-            akun_baru = {"username": username, "password": pw, "saldo": 0, "privilage": "free"}
+            akun_baru = {"username": username, "password": password, "saldo": 0, "privilage": "free"}
             dataUser.append(akun_baru)
             print("berhasil membuat akun")
             with open (json_path_user, "w") as sn:
@@ -60,17 +61,17 @@ def login():
     print("Silahkan Login")
     while True:
         username = input("Masukkan username: ").lower()
-        pw = pwinput.pwinput("Masukkan password: ")
+        password = pwinput.pwinput("Masukkan password: ")
         akunAda = False #SEBUAH VARIABLE YANG DIGUNAKAN UNTUK MENGECEK APAKAH USERNAME TERDAFTAR ATAU TIDAK
         for admin_acc in admin:
-            if admin_acc["adminName"].lower() == username and admin_acc["pwAdmin"]==pw:
+            if admin_acc["adminName"].lower() == username and admin_acc["pwAdmin"]==password:
                 akunAda = True
                 print("Berhasil login sebagai admin")
                 return menu_admin()
         for user in dataUser:
             if user["username"].lower() == username:
                 akunAda = True#JIKA USERNAME DITEMUKAN MAKA VARIABLE AKAN MENJADI TRUE
-                if user["password"] == pw:
+                if user["password"] == password:
                     if user["privilage"] == "free":
                         print("\nBerhasil login sebagai user Free")
                         return menuUserFree()
@@ -83,6 +84,9 @@ def login():
         if not akunAda: #JIKA USERNAME TIDAK DITEMUKAN MAKA AKAN MENGEKSEKUSI COMMAND INI
             print("akun anda tidak dikenal")
             break
+
+
+
 
 def menuUserFree():
     while True:
@@ -109,6 +113,8 @@ def menuUserFree():
             print("Maaf input anda invalid, coba untuk input sesuai pilihan yang ada.")
 
 
+
+
 def userFree():
     while True:
         daftarFilm()
@@ -131,12 +137,13 @@ def userFree():
             print("Maaf input anda invalid.")
 
 
+
 def topup():
     username = input("Masukkan username: ")
-    pw = pwinput.pwinput("Masukkan Password: ")
+    password = pwinput.pwinput("Masukkan Password: ")
     for user in dataUser:
             if user["username"].lower() == username:
-                if user["password"] == pw:
+                if user["password"] == password:
                     saldo = int(input("Masukkan jumlah saldo yang ingin diisi: "))
                     user["saldo"]+=saldo
                     akunAda = True
@@ -157,12 +164,12 @@ def premium():
     print("|                                                                            |")
     print("==============================================================================")
     username = input("Masukkan username: ")
-    pw = pwinput.pwinput("Masukkan Password: ")
+    password = pwinput.pwinput("Masukkan Password: ")
     akunAda = False
     for user in dataUser:
             if user["username"].lower() == username:
                 akunAda = True
-                if user["password"] == pw:
+                if user["password"] == password:
                     bayar = input("Apakah kamu yakin ingin beralih ke akun premium? (y/t): ").lower()
                     if bayar == "y":
                         if user["saldo"] < 50000:
@@ -186,8 +193,8 @@ def premium():
                 else:
                     print("Password yang anda masukkan salah")
                 break
-    if not akunAda: 
-        print("akun anda tidak dikenal")
+    if not akunAda:
+        print("----------------------------akun anda tidak dikenal---------------------------")
 
 
 def menuUserPremium():
@@ -205,6 +212,8 @@ def menuUserPremium():
             nontonPremium()
         elif ask == "0":
             break
+
+
 
 
 def nontonPremium():
@@ -238,6 +247,8 @@ def nontonPremium():
             print("Maaf ID yang anda pilih tidak ada.")
 
 
+
+
 def menu_admin():
     while True:
         print("1. Tampilkan Daftar Film")
@@ -246,7 +257,6 @@ def menu_admin():
         print("4. Hapus Film")
         print("5. Keluar")
         pilihan = input("Pilihan Anda: ")
-
         if pilihan == "1":
             daftarFilm()
         elif pilihan == "2":
@@ -256,10 +266,10 @@ def menu_admin():
         elif pilihan == "4":
             Hapus()
         elif pilihan == "5":
-            print("---Terima kasih telah menggunakan aplikasi.---")
+            print("---Terima kasih telah menggunakan aplikasi---")
             break
         else:
-            print("---Pilihan tidak valid. Silakan coba lagi.---")
+            print("---Pilihan tidak valid, Silakan coba lagi---")
 
 def tambah():
     IDMaks = max([item[0] for item in film])
@@ -271,7 +281,7 @@ def tambah():
     film.append(tambahan)
     with open (json_path_film,"w") as sn:
         json.dump(film,sn, indent=4)
-    print("------------------------Film berhasil ditambahkan.--------------------------")
+    print("------------------------Film berhasil ditambahkan--------------------------")
 
 def ubah():
     daftarFilm()
@@ -286,7 +296,7 @@ def ubah():
             film[i][3] = waktuRelease
             with open (json_path_film,"w") as sn:
                 json.dump(film,sn, indent=4)
-            print("------------------------Film berhasil ubah.--------------------------")
+            print("------------------------Film berhasil ubah--------------------------")
     else:
         print("Maaf Perhiasan dengan ID tersebut tidak ditemukan.")
 
@@ -304,7 +314,7 @@ def Hapus():
             film[i][0] = i + 1
         with open (json_path_film,"w") as sn:
             json.dump(film,sn, indent=4)
-        print("------------------------Film berhasil Dihapus.--------------------------")
+        print("------------------------Film berhasil Dihapus--------------------------")
     else:
         print("Maaf Film dengan No tersebut tidak ditemukan.")
 
@@ -325,7 +335,7 @@ while True:
     elif ask == "2":
         login()
     elif ask == "0":
-        print("----------------------------------Terima Kasih--------------------------------")
+        print("--------------------------------Terima Kasih----------------------------------")
         break
     else:
         print("Maaf input anda invalid, coba untuk input sesuai pilihan yang ada.")
