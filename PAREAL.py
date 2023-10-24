@@ -16,11 +16,14 @@ with open(json_path_user,"r") as userdata:
     dataUser = json.loads(userdata.read())
 
 
+
 print("==============================================================================")
 print("|                                                                            |")
 print("|                                   SI-FLIX                                  |")
 print("|                                                                            |")
 print("==============================================================================")
+
+
 
 
 def daftarFilm():
@@ -31,6 +34,8 @@ def daftarFilm():
     print(table_film)
 
 
+
+#FUNCTION UNTUK REGISTER
 def register():
     print("Silahkan lakukan Registrasi")
     while True:
@@ -57,6 +62,8 @@ def register():
             break
 
 
+
+
 #FUNCTION UNTUK LOGIN
 def login():
     print("Silahkan Login")
@@ -68,7 +75,7 @@ def login():
             if admin_acc["adminName"].lower() == username and admin_acc["pwAdmin"]==password:
                 akunAda = True
                 print("Berhasil login sebagai admin")
-                return menu_admin()
+                return menuAdmin()
         for user in dataUser:
             if user["username"].lower() == username:
                 akunAda = True#JIKA USERNAME DITEMUKAN MAKA VARIABLE AKAN MENJADI TRUE
@@ -88,7 +95,7 @@ def login():
 
 
 
-
+#USER FREE
 def menuUserFree():
     while True:
         print("==============================================================================")
@@ -139,6 +146,7 @@ def userFree():
 
 
 
+#FUNCTION TOPUP
 def topup():
     username = input("Masukkan username: ")
     password = pwinput.pwinput("Masukkan Password: ")
@@ -155,6 +163,9 @@ def topup():
                 break
     if not akunAda: 
         print("akun anda tidak dikenal")
+
+
+
 
 
 #FUNCTION UNTUK BERALIH KE AKUN PREMIUM
@@ -198,6 +209,8 @@ def premium():
         print("----------------------------akun anda tidak dikenal---------------------------")
 
 
+
+#FUNCTION MENU USER PREMIUM
 def menuUserPremium():
     while True:
         print("==============================================================================")
@@ -213,6 +226,9 @@ def menuUserPremium():
             nontonPremium()
         elif ask == "0":
             break
+
+
+
 
 
 
@@ -250,7 +266,8 @@ def nontonPremium():
 
 
 
-def menu_admin():
+#FUNCTION UNTUK MENU ADMIN
+def menuAdmin():
     while True:
         print("1. Tampilkan Daftar Film")
         print("2. Tambah Film")
@@ -272,52 +289,70 @@ def menu_admin():
         else:
             print("---Pilihan tidak valid, Silakan coba lagi---")
 
+
+
+
+#FUNCTION UNTUK TAMBAH
 def tambah():
     IDMaks = max([item[0] for item in film])
     IDFilm = IDMaks + 1
     judulFilm = input("Masukkan Nama Film: ")
     Genre = (input("Masukkan Genre: "))
     tanggalRelease = (input("Masukkan Tanggal Release: "))
-    tambahan = [nomorFilm, judulFilm, Genre, tanggalRelease]
+    tambahan = [IDFilm, judulFilm, Genre, tanggalRelease]
     film.append(tambahan)
     with open (json_path_film,"w") as sn:
         json.dump(film,sn, indent=4)
     print("------------------------Film berhasil ditambahkan--------------------------")
 
+
+
+#FUNCTION UNTUK UPDATE
 def ubah():
-    daftarFilm()
-    IDFilm = int(input("Masukkan No film yang akan diubah: "))
-    for i in range(len(film)):
-        if film[i][0] == IDFilm:
-            judulFilm = input("Masukkan Judul Film baru: ")
-            Genre = input("Masukkan Genre Film baru: ")
-            waktuRelease = input("Masukkan waktu release Film baru: ")
-            film[i][1] = judulFilm
-            film[i][2] = Genre
-            film[i][3] = waktuRelease
-            with open (json_path_film,"w") as sn:
-                json.dump(film,sn, indent=4)
-            print("------------------------Film berhasil ubah--------------------------")
-    else:
-        print("Maaf Perhiasan dengan ID tersebut tidak ditemukan.")
+    try:
+        daftarFilm()
+        IDFilm = int(input("Masukkan No film yang akan diubah: "))
+        for i in range(len(film)):
+            if film[i][0] == IDFilm:
+                judulFilm = input("Masukkan Judul Film baru: ")
+                Genre = input("Masukkan Genre Film baru: ")
+                waktuRelease = input("Masukkan waktu release Film baru: ")
+                film[i][1] = judulFilm
+                film[i][2] = Genre
+                film[i][3] = waktuRelease
+                with open (json_path_film,"w") as sn:
+                    json.dump(film,sn, indent=4)
+                print("------------------------Film berhasil ubah--------------------------")
+        else:
+            print("Maaf Perhiasan dengan ID tersebut tidak ditemukan.")
+    except ValueError:
+        print("ID Film Berupa angka")
+
+
+
 
 def Hapus():
-    daftarFilm()
-    IDFilm = int(input("Masukan No Film yang akan dihapus: "))
-    ada = False
-    for i in range(len(film)):
-        if film[i][0] == IDFilm:
-            del film[i]
-            ada = True
-            break
-    if ada:
+    try:
+        daftarFilm()
+        IDFilm = int(input("Masukan No Film yang akan dihapus: "))
+        ada = False
         for i in range(len(film)):
-            film[i][0] = i + 1
-        with open (json_path_film,"w") as sn:
-            json.dump(film,sn, indent=4)
-        print("------------------------Film berhasil Dihapus--------------------------")
-    else:
-        print("Maaf Film dengan No tersebut tidak ditemukan.")
+            if film[i][0] == IDFilm:
+                del film[i]
+                ada = True
+                break
+        if ada:
+            for i in range(len(film)):
+                film[i][0] = i + 1
+            with open (json_path_film,"w") as sn:
+                json.dump(film,sn, indent=4)
+            print("------------------------Film berhasil Dihapus--------------------------")
+        else:
+            print("Maaf Film dengan No tersebut tidak ditemukan.")
+    except ValueError:
+        print("ID Film Berupa angka")
+
+
 
 
 while True:
@@ -340,3 +375,4 @@ while True:
         break
     else:
         print("Maaf input anda invalid, coba untuk input sesuai pilihan yang ada.")
+
