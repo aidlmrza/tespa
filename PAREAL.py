@@ -16,13 +16,10 @@ with open(json_path_admin, "r") as admindata:
 with open(json_path_user,"r") as userdata:
     dataUser = json.loads(userdata.read())
 
+def clear():
+    os.system('cls')
 
 
-print("==============================================================================")
-print("|                                                                            |")
-print("|                                   SI-FLIX                                  |")
-print("|                                                                            |")
-print("==============================================================================")
 
 
 def daftarFilm():
@@ -34,20 +31,17 @@ def daftarFilm():
 
 
 def register():
-    print("Silahkan lakukan Registrasi")
+    clear()
+    print("------------------------Silahkan Registrasi-------------------------\n")
     while True:
         notAvailable = False
-        username = input("Masukkan username: ").lower().lstrip()
+        username = input("Masukkan username: ").lower().strip()
         if " " in username:
-            print("username tidak boleh mengandung spasi")
+            print("username tidak boleh mengandung spasi\n")
             continue
         if username == "":
-            print("Username tidak boleh kosong")
+            print("Username tidak boleh kosong\n")
             continue
-        password = pwinput.pwinput("Masukkan password: ").strip()
-        if password == "":
-            print("Passsword tidak boleh kosong")
-            print("")
         if all (x.isalpha()for x in username):
             for admin_acc in admin:
                 if admin_acc["adminName"].lower() == username:
@@ -59,6 +53,10 @@ def register():
                     print("username sudah digunakan cobalagi yang lain")
                     notAvailable = True 
                     break
+        password = pwinput.pwinput("Masukkan password: ").strip()
+        if password == "":
+            print("Passsword tidak boleh kosong\n")
+            break
         if not notAvailable:
             akun_baru = {"username": username, "password": password, "saldo": 0, "privilage": "free"}
             dataUser.append(akun_baru)
@@ -74,7 +72,8 @@ def register():
 
 #FUNCTION UNTUK LOGIN
 def login():
-    print("Silahkan Login")
+    clear()
+    print("---------------------------Silahkan Login---------------------------\n")
     while True:
         username = input("Masukkan username: ").lower()
         password = pwinput.pwinput("Masukkan password: ")
@@ -104,7 +103,9 @@ def login():
 
 
 
+
 def menuUserFree():
+    clear()
     while True:
         print("==============================================================================")
         print("|                                                                            |")
@@ -116,7 +117,8 @@ def menuUserFree():
         print("|                                                                            |")
         print("|                                1. Daftar Film                              |")
         print("|                                2. Beli Premium                             |")
-        print("|                                3. Isi Saldo                                |")
+        print("|                                3. Cek Saldo                                |")
+        print("|                                4. Isi Saldo                                |")
         print("|                                0. Keluar                                   |")
         print("|                                                                            |")
         print("|                                                                            |")
@@ -127,6 +129,8 @@ def menuUserFree():
         elif ask == "2":
             premium()
         elif ask == "3":
+            cekSaldo()
+        elif ask == "4":
             topup()
         elif ask == "0":
             break
@@ -138,6 +142,7 @@ def menuUserFree():
 
 def userFree():
     while True:
+        clear()
         daftarFilm()
         print("1. Pilih ID Film")
         print("0. Keluar")
@@ -149,6 +154,7 @@ def userFree():
             if ask == "y":
                 return premium()
             elif ask == "t":
+                clear()
                 break
             else:
                 print("Maaf input anda invalid.")
@@ -157,9 +163,37 @@ def userFree():
         else:
             print("Maaf input anda invalid.")
 
-
+def cekSaldo():
+    clear()
+    print("==============================================================================")
+    print("|                                                                            |")
+    print("|                                   Cek Saldo                                |")
+    print("|                                                                            |")
+    print("==============================================================================")
+    username = input("Masukkan username: ")
+    password = pwinput.pwinput("Masukkan Password: ")
+    akunAda = False
+    for user in dataUser:
+        if user["username"].lower() == username:
+            if user["password"] == password:
+                akunAda = True
+                clear()
+                print(f"Saldo anda sekarang: {user['saldo']}""\n")
+            else:
+                clear()
+                print("-----------------------Password yang anda masukkan salah----------------------\n")
+            break
+    if not akunAda: 
+        clear()
+        print("----------------------------akun anda tidak dikenal---------------------------\n")
 
 def topup():
+    clear()
+    print("==============================================================================")
+    print("|                                                                            |")
+    print("|                                 Topup Saldo                                |")
+    print("|                                                                            |")
+    print("==============================================================================")
     username = input("Masukkan username: ")
     password = pwinput.pwinput("Masukkan Password: ")
     akunAda = False
@@ -168,21 +202,24 @@ def topup():
                 if user["username"].lower() == username:
                     if user["password"] == password:
                         akunAda = True
+                        print(f"Saldo sekarang : {user['saldo']}")
                         topup = int(input("Masukkan jumlah saldo yang ingin diisi: "))
                         if topup < 10000:
-                            print ("minimal topup 10000")
+                            clear()
+                            print ("minimal topup 10000\n")
                         elif topup > 20000000:
                             print("")
                         else:
                             user["saldo"]+=topup
                             with open ("historytopup.txt","a") as history:
                                 print(f"""
-                                ==================================================
-                                    Berhasil Menambahkan Saldo sebesar {topup}
-                                    Saldo sekarang {user['saldo']}
-                                ==================================================
-                                """, file=history)
-                            
+                ==================================================
+                    Username : {user['username']}
+                    Berhasil Menambahkan Saldo sebesar {topup}
+                    Saldo sekarang {user['saldo']}
+                ==================================================
+                """, file=history)
+                            clear()
                             print("==================================================")
                             print(f"  Berhasil Menambahkan Saldo sebesar {topup}")
                             print(f"  Saldo Sekarang Berjumlah {user['saldo']}")
@@ -190,11 +227,14 @@ def topup():
                             with open (json_path_user, "w") as sn:
                                 json.dump(dataUser, sn, indent=4)
                     else:
-                        print("Password yang anda masukkan salah")
+                        clear()
+                        print("-----------------------Password yang anda masukkan salah----------------------\n")
                     break
         if not akunAda: 
+            clear()
             print("----------------------------akun anda tidak dikenal---------------------------\n")
     except ValueError:
+        clear()
         print("Saldo harus berupa angka")
 
 
@@ -203,6 +243,7 @@ def topup():
 
 #FUNCTION UNTUK BERALIH KE AKUN PREMIUM
 def premium():
+    clear()
     print("==============================================================================")
     print("|                                                                            |")
     print("|                            Beralih Akun Premium                            |")
@@ -218,7 +259,7 @@ def premium():
                     bayar = input("Apakah kamu ingin beralih ke akun premium dengan harga Rp800.000? (y/t): ").lower()
                     if bayar == "y":
                         if user["saldo"] < 800000:
-                            ask = input(f"Saldo anda tidak mencukupi, saldo anda sisa {user['saldo']}, apakah mau isi saldo? (y/t) :").lower()
+                            ask = input(f"Saldo anda tidak mencukupi, saldo anda sisa {user['saldo']}, apakah mau isi saldo? (y/t): ").lower()
                             if ask == "y":
                                 topup()
                             elif ask == "t":
@@ -231,40 +272,44 @@ def premium():
                             user["saldo"]-=800000
                             with open (json_path_user,"w") as sn:
                                 json.dump(dataUser,sn,indent=4)
-                            print("--------Anda berhasil beralih ke akun premium-------\n")
+                            clear()
+                            print("\n--------Anda berhasil beralih ke akun premium-------\n")
                             with open ("historypembelian.txt","a") as history:
                                 print(f"""
         =====================================================
 
                             SI-FLIX INVOICE              
-                            
+
         =====================================================
 
-            Upgrade Premium Account            800.000    
-                    
+            Username : {user['username']}
+            Upgrade Premium Account           800.000    
+
         -----------------------------------------------------
 
             Total                             800000    
             Saldo Awal                        {saldoAwal}   
+            -------------------------------------------
             Saldo Sisa                        {user['saldo']}
-                        
+
         -----------------------------------------------------
         """,file=history)
-                            # print("====================================================")
-                            # print("                                                    ")
-                            # print("                  SI-FLIX INVOICE                   ")
-                            # print("                                                    ")
-                            # print("====================================================")
-                            # print("                                                    ")
-                            # print("  Upgrade Premium Account            800.000    ")
-                            # print("                                                    ")
-                            # print("----------------------------------------------------")
-                            # print("                                                    ")
-                            # print("   Total                             800.000    ")
-                            # print(f"  Saldo Awal                        {saldoAwal}    ")
-                            # print(f"  Saldo Sisa                        {user['saldo']}")
-                            # print("                                                    ")
-                            # print("----------------------------------------------------")
+                            print("====================================================")
+                            print("                                                    ")
+                            print("                  SI-FLIX INVOICE                   ")
+                            print("                                                    ")
+                            print("====================================================")
+                            print("                                                    ")
+                            print("  Upgrade Premium Account           800.000 ")
+                            print("                                                    ")
+                            print("----------------------------------------------------")
+                            print("                                                    ")
+                            print("  Total                             800000    ")
+                            print(f"  Saldo Awal                        {saldoAwal}    ")
+                            print("  -------------------------------------------")
+                            print(f"  Saldo Sisa                        {user['saldo']}")
+                            print("                                                    ")
+                            print("----------------------------------------------------")
                             break
                     elif bayar == "t":
                         break
@@ -444,6 +489,10 @@ def Hapus():
 
 
 while True:
+    print("==============================================================================")
+    print("|                                                                            |")
+    print("|                                   SI-FLIX                                  |")
+    print("|                                                                            |")
     print("==============================================================================")
     print("|                                                                            |")
     print("|                                                                            |")
