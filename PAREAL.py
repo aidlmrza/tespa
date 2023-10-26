@@ -8,6 +8,7 @@ os.system('cls')
 json_path_film = 'D:/01_CODE/DDP/PraktikumDDP/TESPA/dataData/film.json'
 json_path_admin = 'D:/01_CODE/DDP/PraktikumDDP/TESPA/dataData/admin.json'
 json_path_user = 'D:/01_CODE/DDP/PraktikumDDP/TESPA/dataData/user.json'
+
 with open(json_path_film,"r") as filmdata:
     film = json.loads(filmdata.read())
 with open(json_path_admin, "r") as admindata:
@@ -181,7 +182,7 @@ def topup():
                                 print(f"""
                                 ==================================================
                                     Berhasil Menambahkan Saldo sebesar {topup}
-                                    Berhasil Menambahkan Saldo sebesar {topup}
+                                    Saldo sekarang {user['saldo']}
                                 ==================================================
                                 """, file=history)
                             
@@ -217,7 +218,7 @@ def premium():
             if user["username"].lower() == username:
                 akunAda = True
                 if user["password"] == password:
-                    bayar = input("Apakah kamu ingin beralih ke akun premium dengan harga Rp50.000? (y/t): ").lower()
+                    bayar = input("Apakah kamu ingin beralih ke akun premium dengan harga Rp800.000? (y/t): ").lower()
                     if bayar == "y":
                         if user["saldo"] < 800000:
                             ask = input(f"Saldo anda tidak mencukupi, saldo anda sisa {user['saldo']}, apakah mau isi saldo? (y/t) :").lower()
@@ -234,21 +235,39 @@ def premium():
                             with open (json_path_user,"w") as sn:
                                 json.dump(dataUser,sn,indent=4)
                             print("--------Anda berhasil beralih ke akun premium-------\n")
-                            print("====================================================")
-                            print("                                                    ")
-                            print("                  SI-FLIX INVOICE                   ")
-                            print("                                                    ")
-                            print("====================================================")
-                            print("                                                    ")
-                            print("  Upgrade Premium Account            800.000    ")
-                            print("                                                    ")
-                            print("----------------------------------------------------")
-                            print("                                                    ")
-                            print("   Total                             800.000    ")
-                            print(f"  Saldo Awal                        {saldoAwal}    ")
-                            print(f"  Saldo Sisa                        {user['saldo']}")
-                            print("                                                    ")
-                            print("----------------------------------------------------")
+                            with open ("historypembelian.txt","a") as history:
+                                print(f"""
+        =====================================================
+
+                            SI-FLIX INVOICE              
+                            
+        =====================================================
+
+            Upgrade Premium Account            800.000    
+                    
+        -----------------------------------------------------
+
+            Total                             800000    
+            Saldo Awal                        {saldoAwal}   
+            Saldo Sisa                        {user['saldo']}
+                        
+        -----------------------------------------------------
+        """,file=history)
+                            # print("====================================================")
+                            # print("                                                    ")
+                            # print("                  SI-FLIX INVOICE                   ")
+                            # print("                                                    ")
+                            # print("====================================================")
+                            # print("                                                    ")
+                            # print("  Upgrade Premium Account            800.000    ")
+                            # print("                                                    ")
+                            # print("----------------------------------------------------")
+                            # print("                                                    ")
+                            # print("   Total                             800.000    ")
+                            # print(f"  Saldo Awal                        {saldoAwal}    ")
+                            # print(f"  Saldo Sisa                        {user['saldo']}")
+                            # print("                                                    ")
+                            # print("----------------------------------------------------")
                             break
                     elif bayar == "t":
                         break
@@ -319,7 +338,7 @@ def nontonPremium():
                     print("||                                                                          ||")
                     print("||                                                                          ||")
                     print("==============================================================================")
-                    input("")
+                    input("Enter untuk keluar")
                     return
             if not filmAda:
                 print("Maaf ID yang anda pilih tidak ada.")
@@ -447,4 +466,3 @@ while True:
         break
     else:
         print("Maaf input anda invalid, coba untuk input sesuai pilihan yang ada.")
-
