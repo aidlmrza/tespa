@@ -44,9 +44,6 @@ def register():
         if username == "":
             print("Username tidak boleh kosong")
             continue
-        else:
-            print("Username Harus huruf")
-            continue
         password = pwinput.pwinput("Masukkan password: ").strip()
         if password == "":
             print("Passsword tidak boleh kosong")
