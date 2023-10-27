@@ -1,6 +1,140 @@
 [
-    [1,"AVENGERS","Action","4 Mei 2012"],
-    [2,"Avengers: Age of Ultron","Action", "22 April 2015"],
-    [3, "Avengers: Infinity War","Action", "25 April 2018"],
-    [4,"Avengers: Endgame", "Action", "26 April 2019"]
+    [
+        1,
+        "Avengers: Infinity War",
+        "Action",
+        "25 April 2018"
+    ],
+    [
+        2,
+        "Avengers: Endgame",
+        "Action",
+        "26 April 2019"
+    ],
+    [
+        3,
+        "Avengers: Age of Ultron",
+        "Action",
+        "4 Mei 2012"
+    ],
+    [
+        4,
+        "Harry Potter and the Sorcerer's Stone",
+        "Fantasy",
+        "19 Desember 2001"
+    ],
+    [
+        5,
+        "Harry Potter and the Chamber of Secrets",
+        "Fantasy",
+        "3 November 2002"
+    ],
+    [
+        6,
+        "Harry Potter and the Prisoner of Azkaban",
+        "Fantasy",
+        "16 Juni 2004"
+    ],
+    [
+        7,
+        "Harry Potter and the Goblet of Fire",
+        "Fantasy",
+        "18 November 2005"
+    ],
+    [
+        8,
+        "Harry Potter and the Order of the Phoenix",
+        "Fantasy",
+        "11 Juli 2007"
+    ],
+    [
+        9,
+        "Harry Potter and the Half-Blood Prince",
+        "Fantasy",
+        "15 Juli 2009"
+    ],
+    [
+        10,
+        "Harry Potter and the Deadly Hallows - Part 1",
+        "Fantasy",
+        "10 November 2010"
+    ],
+    [
+        11,
+        "Harry Potter and the Deadly Hallows - Part 2",
+        "Fantasy",
+        "15 Juli 2011"
+    ],
+    [
+        12,
+        "Harry Potter and the Cursed Child",
+        "Fantasy",
+        "31 Juli 2016"
+    ],
+    [
+        13,
+        "The Maze Runner",
+        "Action",
+        "17 September 2014"
+    ],
+    [
+        14,
+        "The Maze Runner: Scorch Trials",
+        "Action",
+        "11 September 2015"
+    ],
+    [
+        15,
+        "Maze Runner: The Death Cure",
+        "Action",
+        "24 Januari 2018"
+    ],
+    [
+        16,
+        "Home Alone",
+        "Comedy",
+        "16 Agustus 1991"
+    ],
+    [
+        17,
+        "Home Alone 2: Lost in the New York",
+        "Comedy",
+        "8 Desember 1992"
+    ],
+    [
+        18,
+        "Home Alone 3",
+        "Comedy",
+        "12 Desember 1997"
+    ],
+    [
+        19,
+        "Home Alone 4",
+        "Comedy",
+        "3 November 2005"
+    ],
+    [
+        20,
+        "Monster, Inc.",
+        "Animation, Comedy",
+        "2 November 2001"
+    ],
+    [
+        21,
+        "Monster University",
+        "Animation, Comedy",
+        "21 Juni 2013"
+    ],
+    [
+        22,
+        "Inside Out",
+        "Animation, Comedy, Adventure",
+        "19 Agustus 2015"
+    ],
+    [
+        23,
+        "The Incredibles",
+        "Animation, Action, Family, Adventure",
+        "24 Oktober 2004"
+    ]
 ]
