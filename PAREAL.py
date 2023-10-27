@@ -5,10 +5,10 @@ from prettytable import PrettyTable
 os.system('cls')
 
 
-json_path_film = 'D:/01_CODE/DDP/PraktikumDDP/TESPA/dataData/film.json'
-json_path_admin = 'D:/01_CODE/DDP/PraktikumDDP/TESPA/dataData/admin.json'
-json_path_user = 'D:/01_CODE/DDP/PraktikumDDP/TESPA/dataData/user.json'
 
+json_path_film = 'C:/Aidil/01_CODING/Semester1/PA/dataData/film.json'
+json_path_admin = 'C:/Aidil/01_CODING/Semester1/PA/dataData/admin.json'
+json_path_user = 'C:/Aidil/01_CODING/Semester1/PA/dataData/user.json'
 with open(json_path_film,"r") as filmdata:
     film = json.loads(filmdata.read())
 with open(json_path_admin, "r") as admindata:
