@@ -16,6 +16,8 @@ with open(json_path_admin, "r") as admindata:
 with open(json_path_user,"r") as userdata:
     dataUser = json.loads(userdata.read())
 
+
+
 def clear():
     os.system('cls')
 
@@ -128,6 +130,8 @@ def menuUserFree():
             userFree()
         elif ask == "2":
             premium()
+            break
+            login()
         elif ask == "3":
             cekSaldo()
         elif ask == "4":
@@ -207,8 +211,8 @@ def topup():
                         if topup < 10000:
                             clear()
                             print ("minimal topup 10000\n")
-                        elif topup > 20000000:
-                            print("")
+                        elif topup > 10000000:
+                            print("Tidak boleh topup lebih dari 10000000")
                         else:
                             user["saldo"]+=topup
                             with open ("historytopup.txt","a") as history:
@@ -259,13 +263,8 @@ def premium():
                     bayar = input("Apakah kamu ingin beralih ke akun premium dengan harga Rp800.000? (y/t): ").lower()
                     if bayar == "y":
                         if user["saldo"] < 800000:
-                            ask = input(f"Saldo anda tidak mencukupi, saldo anda sisa {user['saldo']}, apakah mau isi saldo? (y/t): ").lower()
-                            if ask == "y":
-                                topup()
-                            elif ask == "t":
-                                break
-                            else:
-                                print("Invalid")
+                            input(f"Saldo anda tidak mencukupi, saldo anda sisa {user['saldo']}, silahkan isi saldo terlebih dahulu (enter) ").lower()
+                            break
                         elif user["saldo"] >= 800000:
                             saldoAwal = user["saldo"]
                             user["privilage"] = "premium"
@@ -320,7 +319,7 @@ def premium():
                 break
     if not akunAda:
         print("----------------------------akun anda tidak dikenal---------------------------")
-
+    login()
 
 
 def menuUserPremium():
@@ -460,7 +459,7 @@ def ubah():
                 json.dump(film,sn, indent=4)
             print("------------------------Film berhasil ubah--------------------------")
     else:
-        print("Maaf Perhiasan dengan ID tersebut tidak ditemukan.")
+        print("Maaf Film dengan ID tersebut tidak ditemukan.")
 
 
 
@@ -482,13 +481,14 @@ def Hapus():
             json.dump(film,sn, indent=4)
         print("------------------------Film berhasil Dihapus--------------------------")
     else:
-        print("Maaf Film dengan No tersebut tidak ditemukan.")
+        print("Maaf Film dengan ID tersebut tidak ditemukan.")
 
 
 
 
 
 while True:
+    clear()
     print("==============================================================================")
     print("|                                                                            |")
     print("|                                   SI-FLIX                                  |")
