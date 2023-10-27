@@ -5,18 +5,16 @@ from prettytable import PrettyTable
 os.system('cls')
 
 
+json_path_film = 'D:/01_CODE/DDP/PraktikumDDP/TESPA/dataData/film.json'
+json_path_admin = 'D:/01_CODE/DDP/PraktikumDDP/TESPA/dataData/admin.json'
+json_path_user = 'D:/01_CODE/DDP/PraktikumDDP/TESPA/dataData/user.json'
 
-json_path_film = 'C:/Aidil/01_CODING/Semester1/PA/dataData/film.json'
-json_path_admin = 'C:/Aidil/01_CODING/Semester1/PA/dataData/admin.json'
-json_path_user = 'C:/Aidil/01_CODING/Semester1/PA/dataData/user.json'
 with open(json_path_film,"r") as filmdata:
     film = json.loads(filmdata.read())
 with open(json_path_admin, "r") as admindata:
     admin = json.loads(admindata.read())
 with open(json_path_user,"r") as userdata:
     dataUser = json.loads(userdata.read())
-
-
 
 def clear():
     os.system('cls')
@@ -30,6 +28,9 @@ def daftarFilm():
     for item in film:
         table_film.add_row(item)
     print(table_film)
+
+
+
 
 
 def register():
@@ -77,8 +78,14 @@ def login():
     clear()
     print("---------------------------Silahkan Login---------------------------\n")
     while True:
-        username = input("Masukkan username: ").lower()
-        password = pwinput.pwinput("Masukkan password: ")
+        username = input("Masukkan username: ").lower().strip()
+        if username == "":
+            print("Username tidak boleh kosong\n")
+            continue
+        password = pwinput.pwinput("Masukkan password: ").strip()
+        if password == "":
+            print("Passsword tidak boleh kosong\n")
+            break
         akunAda = False 
         for admin_acc in admin:
             if admin_acc["adminName"].lower() == username and admin_acc["pwAdmin"]==password:
@@ -143,7 +150,6 @@ def menuUserFree():
 
 
 
-
 def userFree():
     while True:
         clear()
@@ -167,6 +173,9 @@ def userFree():
         else:
             print("Maaf input anda invalid.")
 
+
+
+
 def cekSaldo():
     clear()
     print("==============================================================================")
@@ -174,7 +183,7 @@ def cekSaldo():
     print("|                                   Cek Saldo                                |")
     print("|                                                                            |")
     print("==============================================================================")
-    username = input("Masukkan username: ")
+    username = input("Masukkan username: ").strip()
     password = pwinput.pwinput("Masukkan Password: ")
     akunAda = False
     for user in dataUser:
@@ -211,8 +220,8 @@ def topup():
                         if topup < 10000:
                             clear()
                             print ("minimal topup 10000\n")
-                        elif topup > 10000000:
-                            print("Tidak boleh topup lebih dari 10000000")
+                        elif topup > 20000000:
+                            print("")
                         else:
                             user["saldo"]+=topup
                             with open ("historytopup.txt","a") as history:
@@ -319,7 +328,6 @@ def premium():
                 break
     if not akunAda:
         print("----------------------------akun anda tidak dikenal---------------------------")
-    login()
 
 
 def menuUserPremium():
@@ -388,6 +396,7 @@ def nontonPremium():
 
 
 
+
 def menuAdmin():
     while True:
         print("==============================================================================")
@@ -418,6 +427,7 @@ def menuAdmin():
 
 
 
+
 def tambah():
     while True:
         IDMaks = max([item[0] for item in film])
@@ -444,6 +454,7 @@ def tambah():
 
 
 
+
 def ubah():
     daftarFilm()
     IDFilm = int(input("Masukkan No film yang akan diubah: "))
@@ -459,7 +470,7 @@ def ubah():
                 json.dump(film,sn, indent=4)
             print("------------------------Film berhasil ubah--------------------------")
     else:
-        print("Maaf Film dengan ID tersebut tidak ditemukan.")
+        print("Maaf Perhiasan dengan ID tersebut tidak ditemukan.")
 
 
 
@@ -481,14 +492,13 @@ def Hapus():
             json.dump(film,sn, indent=4)
         print("------------------------Film berhasil Dihapus--------------------------")
     else:
-        print("Maaf Film dengan ID tersebut tidak ditemukan.")
+        print("Maaf Film dengan No tersebut tidak ditemukan.")
 
 
 
 
 
 while True:
-    clear()
     print("==============================================================================")
     print("|                                                                            |")
     print("|                                   SI-FLIX                                  |")
