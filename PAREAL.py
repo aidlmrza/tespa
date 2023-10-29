@@ -46,6 +46,10 @@ def register():
             print("Username tidak boleh kosong\n")
             continue
         if all (x.isalpha()for x in username):
+            password = pwinput.pwinput("Masukkan password: ").strip()
+            if password == "":
+                print("Passsword tidak boleh kosong\n")
+                break
             for admin_acc in admin:
                 if admin_acc["adminName"].lower() == username:
                     print("username sudah digunakan cobalagi yang lain")
@@ -56,20 +60,19 @@ def register():
                     print("username sudah digunakan cobalagi yang lain")
                     notAvailable = True 
                     break
-        password = pwinput.pwinput("Masukkan password: ").strip()
-        if password == "":
-            print("Passsword tidak boleh kosong\n")
-            break
-        if not notAvailable:
-            akun_baru = {"username": username, "password": password, "saldo": 0, "privilage": "free"}
-            dataUser.append(akun_baru)
-            print("berhasil membuat akun")
-            with open (json_path_user, "w") as sn:
-                json.dump(dataUser,sn,indent=4)
-            break
+            if not notAvailable:
+                akun_baru = {"username": username, "password": password, "saldo": 0, "privilage": "free"}
+                dataUser.append(akun_baru)
+                print("berhasil membuat akun")
+                with open (json_path_user, "w") as sn:
+                    json.dump(dataUser,sn,indent=4)
+                break
         else:
-            print("Username Harus huruf")
+            print("Username hanya bisa mengandung huruf\n")
             continue
+
+
+
 
 
 
@@ -330,27 +333,151 @@ def premium():
         print("----------------------------akun anda tidak dikenal---------------------------")
 
 
+
+
+
 def menuUserPremium():
     while True:
         print("==============================================================================")
         print("|                                                                            |")
         print("|                                   SI-FLIX                                  |")
         print("|                                   PREMIUM                                  |")
+        print("|                                 Daftar Film                                |")
         print("|                                                                            |")
         print("==============================================================================")
         print("|                                                                            |")
         print("|                                                                            |")
-        print("|                                1. Daftar Film                              |")
+        print("|                                1. Lihat semua Film                         |")
+        print("|                                2. Cari film                                |")
+        print("|                                3. Cari genre                               |")
         print("|                                0. Keluar                                   |")
         print("|                                                                            |")
         print("|                                                                            |")
         print("==============================================================================")
-        ask = input("Pilih Opsi (1/0): ")
+        ask = input("Pilih opsi: ")
         if ask == "1":
+            nontonPremium()
+        elif ask == "2":
+            searchJudul()
+            nontonPremium()
+        elif ask == "3":
+            searchGenre()
             nontonPremium()
         elif ask == "0":
             break
+        else:
+            print("Maaf input anda invalid, coba untuk input sesuai pilihan yang ada.")
 
+
+def searchJudul():
+    while True:
+        cariFilm = input("Masukkan nama film yang ingin Anda cari: ")
+        namaFilm = []
+        for item in film:
+            judulFilm = item[1]
+            if cariFilm.lower() in judulFilm.lower():
+                namaFilm.append(item)
+        if namaFilm:
+            table_film = PrettyTable()
+            table_film.field_names =  ["ID","Judul Film","Genre","Waktu Release"]
+            for item in namaFilm:
+                table_film.add_row(item)
+            print("Film yang ditemukan:")
+            print(table_film)
+            filmAda = False
+            try:
+                print("0 untuk keluar")
+                ask = int(input("Pilih ID Film: "))
+                if ask == 0:
+                    break
+                for i in range(len(namaFilm)):
+                    if namaFilm[i][0] == ask:
+                        filmAda = True
+                        print("Memainkan film ")
+                        print(f"Judul          : {namaFilm[i][1]}")
+                        print(f"Genre          : {namaFilm[i][2]}")
+                        print(f"Tanggal Tayang : {namaFilm[i][3]}")
+                        print("==============================================================================")
+                        print("||                                                                          ||")
+                        print("||                                                                          ||")
+                        print("||                                                                          ||")
+                        print("||                                                                          ||")
+                        print("||                                                                          ||")
+                        print("||                               ||        ||                               ||")
+                        print("||                               ||        ||                               ||")
+                        print("||                               ||        ||                               ||")
+                        print("||                               ||        ||                               ||")
+                        print("||                               ||        ||                               ||")
+                        print("||                                                                          ||")
+                        print("||                                                                          ||")
+                        print("||                                                                          ||")
+                        print("||                                                                          ||")
+                        print("||                                                                          ||")
+                        print("==============================================================================")
+                        input("Enter untuk keluar")
+                        return
+                if not filmAda:
+                    print("Maaf ID yang anda pilih tidak ada.")
+            except ValueError:
+                print("Pilih ID dengan menggunakan angka")
+        else:
+            print("Film tidak ditemukan.")
+
+
+
+def searchGenre():
+    while True:
+        cariGenre = input("Masukkan Genre film yang ingin dicari: ")
+        namaGenre = []
+        for item in film:
+            genreFilm = item[2]
+            if cariGenre.lower() in genreFilm.lower():
+                namaGenre.append(item)
+        if namaGenre:
+            table_film = PrettyTable()
+            table_film.field_names =  ["ID","Judul Film","Genre","Waktu Release"]
+            for item in namaGenre:
+                table_film.add_row(item)
+            print("Film dengan genre yang diinginkan:")
+            print(table_film)
+            filmAda = False
+            try:
+                print("0 untuk keluar")
+                ask = int(input("Pilih ID Film: "))
+                if ask == 0:
+                    break
+                for i in range(len(namaGenre)):
+                    if namaGenre[i][0] == ask:
+                        filmAda = True
+                        print("Memainkan film ")
+                        print(f"Judul          : {namaGenre[i][1]}")
+                        print(f"Genre          : {namaGenre[i][2]}")
+                        print(f"Tanggal Tayang : {namaGenre[i][3]}")
+                        print("==============================================================================")
+                        print("||                                                                          ||")
+                        print("||                                                                          ||")
+                        print("||                                                                          ||")
+                        print("||                                                                          ||")
+                        print("||                                                                          ||")
+                        print("||                               ||        ||                               ||")
+                        print("||                               ||        ||                               ||")
+                        print("||                               ||        ||                               ||")
+                        print("||                               ||        ||                               ||")
+                        print("||                               ||        ||                               ||")
+                        print("||                                                                          ||")
+                        print("||                                                                          ||")
+                        print("||                                                                          ||")
+                        print("||                                                                          ||")
+                        print("||                                                                          ||")
+                        print("==============================================================================")
+                        input("Enter untuk keluar")
+                        return
+                if not filmAda:
+                    print("Maaf ID yang anda pilih tidak ada.")
+            except ValueError:
+                print("Pilih ID dengan menggunakan angka")
+        else:
+            print("Film tidak ditemukan.")
 
 
 
@@ -430,7 +557,7 @@ def menuAdmin():
 
 def tambah():
     while True:
-        IDMaks = max([item[0] for item in film])
+        IDMaks = max(item[0] for item in film)
         IDFilm = IDMaks + 1
         judulFilm = input("Masukkan Nama Film: ").strip()
         if judulFilm == "":
