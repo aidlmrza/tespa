@@ -16,6 +16,8 @@ with open(json_path_admin, "r") as admindata:
 with open(json_path_user,"r") as userdata:
     dataUser = json.loads(userdata.read())
 
+
+
 def clear():
     os.system('cls')
 
@@ -79,6 +81,7 @@ def register():
 #FUNCTION UNTUK LOGIN
 def login():
     clear()
+    global username
     print("---------------------------Silahkan Login---------------------------\n")
     while True:
         username = input("Masukkan username: ").lower().strip()
@@ -106,8 +109,9 @@ def login():
                         print("\n----------------------Berhasil login sebagai user Premium---------------------")
                         return menuUserPremium()
                 else:
+                    clear()
                     print("Password yang anda masukkan salah")
-                break
+                    return
         if not akunAda: 
             print("akun anda tidak dikenal")
             break
@@ -140,8 +144,6 @@ def menuUserFree():
             userFree()
         elif ask == "2":
             premium()
-            break
-            login()
         elif ask == "3":
             cekSaldo()
         elif ask == "4":
@@ -157,8 +159,7 @@ def userFree():
     while True:
         clear()
         daftarFilm()
-        print("1. Pilih ID Film")
-        print("0. Keluar")
+        print("Input 0 untuk Keluar")
         ask = input("Pilih opsi: ")
         if ask == "1":
             ask = int(input("Pilih ID Film yang ingin dimainkan: "))
@@ -186,7 +187,7 @@ def cekSaldo():
     print("|                                   Cek Saldo                                |")
     print("|                                                                            |")
     print("==============================================================================")
-    username = input("Masukkan username: ").strip()
+    print(f"Username: {username}")
     password = pwinput.pwinput("Masukkan Password: ")
     akunAda = False
     for user in dataUser:
@@ -199,9 +200,10 @@ def cekSaldo():
                 clear()
                 print("-----------------------Password yang anda masukkan salah----------------------\n")
             break
-    if not akunAda: 
-        clear()
-        print("----------------------------akun anda tidak dikenal---------------------------\n")
+
+
+
+
 
 def topup():
     clear()
@@ -210,7 +212,7 @@ def topup():
     print("|                                 Topup Saldo                                |")
     print("|                                                                            |")
     print("==============================================================================")
-    username = input("Masukkan username: ")
+    print(f"Username: {username}")
     password = pwinput.pwinput("Masukkan Password: ")
     akunAda = False
     try:
@@ -246,9 +248,6 @@ def topup():
                         clear()
                         print("-----------------------Password yang anda masukkan salah----------------------\n")
                     break
-        if not akunAda: 
-            clear()
-            print("----------------------------akun anda tidak dikenal---------------------------\n")
     except ValueError:
         clear()
         print("Saldo harus berupa angka")
@@ -265,18 +264,16 @@ def premium():
     print("|                            Beralih Akun Premium                            |")
     print("|                                                                            |")
     print("==============================================================================")
-    username = input("Masukkan username: ")
+    print(f"Username: {username}")
     password = pwinput.pwinput("Masukkan Password: ")
-    akunAda = False
     for user in dataUser:
             if user["username"].lower() == username:
-                akunAda = True
                 if user["password"] == password:
                     bayar = input("Apakah kamu ingin beralih ke akun premium dengan harga Rp800.000? (y/t): ").lower()
                     if bayar == "y":
                         if user["saldo"] < 800000:
                             input(f"Saldo anda tidak mencukupi, saldo anda sisa {user['saldo']}, silahkan isi saldo terlebih dahulu (enter) ").lower()
-                            break
+                            return topup()
                         elif user["saldo"] >= 800000:
                             saldoAwal = user["saldo"]
                             user["privilage"] = "premium"
@@ -329,14 +326,13 @@ def premium():
                 else:
                     print("Password yang anda masukkan salah")
                 break
-    if not akunAda:
-        print("----------------------------akun anda tidak dikenal---------------------------")
 
 
 
 
 
 def menuUserPremium():
+    clear()
     while True:
         print("==============================================================================")
         print("|                                                                            |")
@@ -356,42 +352,46 @@ def menuUserPremium():
         print("==============================================================================")
         ask = input("Pilih opsi: ")
         if ask == "1":
+            clear()
+            daftarFilm()
             nontonPremium()
         elif ask == "2":
             searchJudul()
-            nontonPremium()
         elif ask == "3":
             searchGenre()
-            nontonPremium()
         elif ask == "0":
             break
         else:
             print("Maaf input anda invalid, coba untuk input sesuai pilihan yang ada.")
 
 
+
+
 def searchJudul():
-    while True:
-        cariFilm = input("Masukkan nama film yang ingin Anda cari: ")
-        namaFilm = []
-        for item in film:
-            judulFilm = item[1]
-            if cariFilm.lower() in judulFilm.lower():
-                namaFilm.append(item)
-        if namaFilm:
-            table_film = PrettyTable()
-            table_film.field_names =  ["ID","Judul Film","Genre","Waktu Release"]
-            for item in namaFilm:
-                table_film.add_row(item)
-            print("Film yang ditemukan:")
-            print(table_film)
-            filmAda = False
+    clear()
+    cariFilm = input("Masukkan nama film yang ingin Anda cari: ")
+    namaFilm = []
+    for item in film:
+        judulFilm = item[1]
+        if cariFilm.lower() in judulFilm.lower():
+            namaFilm.append(item)
+    if namaFilm:
+        table_film = PrettyTable()
+        table_film.field_names =  ["ID","Judul Film","Genre","Waktu Release"]
+        for item in namaFilm:
+            table_film.add_row(item)
+        print("Film yang ditemukan:")
+        print(table_film)
+        filmAda = False
+        while True:
             try:
                 print("0 untuk keluar")
                 ask = int(input("Pilih ID Film: "))
                 if ask == 0:
-                    break
+                    return
                 for i in range(len(namaFilm)):
                     if namaFilm[i][0] == ask:
+                        clear()
                         filmAda = True
                         print("Memainkan film ")
                         print(f"Judul          : {namaFilm[i][1]}")
@@ -415,39 +415,43 @@ def searchJudul():
                         print("||                                                                          ||")
                         print("==============================================================================")
                         input("Enter untuk keluar")
+                        clear()
                         return
                 if not filmAda:
-                    print("Maaf ID yang anda pilih tidak ada.")
+                    print("Maaf ID yang anda pilih tidak ada.\n")
             except ValueError:
-                print("Pilih ID dengan menggunakan angka")
-        else:
-            print("Film tidak ditemukan.")
+                print("Pilih ID dengan menggunakan angka\n")
+    else:
+        print("Film tidak ditemukan.\n")
+
 
 
 
 def searchGenre():
-    while True:
-        cariGenre = input("Masukkan Genre film yang ingin dicari: ")
-        namaGenre = []
-        for item in film:
-            genreFilm = item[2]
-            if cariGenre.lower() in genreFilm.lower():
-                namaGenre.append(item)
-        if namaGenre:
-            table_film = PrettyTable()
-            table_film.field_names =  ["ID","Judul Film","Genre","Waktu Release"]
-            for item in namaGenre:
-                table_film.add_row(item)
-            print("Film dengan genre yang diinginkan:")
-            print(table_film)
-            filmAda = False
+    clear()
+    cariGenre = input("Masukkan Genre film yang ingin dicari: ")
+    namaGenre = []
+    for item in film:
+        genreFilm = item[2]
+        if cariGenre.lower() in genreFilm.lower():
+            namaGenre.append(item)
+    if namaGenre:
+        table_film = PrettyTable()
+        table_film.field_names =  ["ID","Judul Film","Genre","Waktu Release"]
+        for item in namaGenre:
+            table_film.add_row(item)
+        print("Film dengan genre yang diinginkan:")
+        print(table_film)
+        filmAda = False
+        while True:
             try:
                 print("0 untuk keluar")
                 ask = int(input("Pilih ID Film: "))
                 if ask == 0:
-                    break
+                    return
                 for i in range(len(namaGenre)):
                     if namaGenre[i][0] == ask:
+                        clear()
                         filmAda = True
                         print("Memainkan film ")
                         print(f"Judul          : {namaGenre[i][1]}")
@@ -471,19 +475,20 @@ def searchGenre():
                         print("||                                                                          ||")
                         print("==============================================================================")
                         input("Enter untuk keluar")
+                        clear()
                         return
                 if not filmAda:
-                    print("Maaf ID yang anda pilih tidak ada.")
+                    print("Maaf ID yang anda pilih tidak ada.\n")
             except ValueError:
-                print("Pilih ID dengan menggunakan angka")
-        else:
-            print("Film tidak ditemukan.")
+                print("Pilih ID dengan menggunakan angka\n")
+    else:
+        print("Genre tidak ditemukan.\n")
+
 
 
 
 def nontonPremium():
     while True:
-        daftarFilm()
         filmAda = False
         try:
             print("0 untuk keluar")
@@ -492,6 +497,7 @@ def nontonPremium():
                 break
             for i in range(len(film)):
                 if film[i][0] == ask:
+                    clear()
                     filmAda = True
                     print("Memainkan film ")
                     print(f"Judul          : {film[i][1]}")
@@ -515,16 +521,18 @@ def nontonPremium():
                     print("||                                                                          ||")
                     print("==============================================================================")
                     input("Enter untuk keluar")
+                    clear()
                     return
             if not filmAda:
-                print("Maaf ID yang anda pilih tidak ada.")
+                print("Maaf ID yang anda pilih tidak ada.\n")
         except ValueError:
-            print("Pilih ID dengan menggunakan angka")
+            print("Pilih ID dengan menggunakan angka.\n")
 
 
 
 
 def menuAdmin():
+    clear()
     while True:
         print("==============================================================================")
         print("|                                                                            |")
@@ -546,7 +554,7 @@ def menuAdmin():
         elif pilihan == "4":
             Hapus()
         elif pilihan == "0":
-            print("---Terima kasih telah menggunakan aplikasi---")
+            print("---Anda berhasil keluar---\n")
             break
         else:
             print("---Pilihan tidak valid, Silakan coba lagi---")
