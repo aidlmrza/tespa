@@ -225,8 +225,8 @@ def topup():
                         if topup < 10000:
                             clear()
                             print ("minimal topup 10000\n")
-                        elif topup > 20000000:
-                            print("")
+                        elif topup > 1000000:
+                            print("Maksimal topup 1000000\n")
                         else:
                             user["saldo"]+=topup
                             with open ("historytopup.txt","a") as history:
