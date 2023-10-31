@@ -5,9 +5,9 @@ from prettytable import PrettyTable
 os.system('cls')
 
 
-json_path_film = 'D:/01_CODE/DDP/PraktikumDDP/TESPA/dataData/film.json'
-json_path_admin = 'D:/01_CODE/DDP/PraktikumDDP/TESPA/dataData/admin.json'
-json_path_user = 'D:/01_CODE/DDP/PraktikumDDP/TESPA/dataData/user.json'
+json_path_film = 'C:/Aidil/01_CODING/Semester1/PA/dataData/film.json'
+json_path_admin = 'C:/Aidil/01_CODING/Semester1/PA/dataData/admin.json'
+json_path_user = 'C:/Aidil/01_CODING/Semester1/PA/dataData/user.json'
 
 with open(json_path_film,"r") as filmdata:
     film = json.loads(filmdata.read())
@@ -80,7 +80,6 @@ def register():
 
 #FUNCTION UNTUK LOGIN
 def login():
-    clear()
     global username
     print("---------------------------Silahkan Login---------------------------\n")
     while True:
@@ -113,6 +112,7 @@ def login():
                     print("Password yang anda masukkan salah")
                     return
         if not akunAda: 
+            clear()
             print("akun anda tidak dikenal")
             break
 
@@ -123,59 +123,66 @@ def login():
 def menuUserFree():
     clear()
     while True:
-        print("==============================================================================")
-        print("|                                                                            |")
-        print("|                                   SI-FLIX                                  |")
-        print("|                                  USER-FREE                                 |")
-        print("|                                                                            |")
-        print("==============================================================================")
-        print("|                                                                            |")
-        print("|                                                                            |")
-        print("|                                1. Daftar Film                              |")
-        print("|                                2. Beli Premium                             |")
-        print("|                                3. Cek Saldo                                |")
-        print("|                                4. Isi Saldo                                |")
-        print("|                                0. Keluar                                   |")
-        print("|                                                                            |")
-        print("|                                                                            |")
-        print("==============================================================================")
-        ask = input("Pilih opsi (1/2/3/0): ")
-        if ask == "1":
-            userFree()
-        elif ask == "2":
-            premium()
-        elif ask == "3":
-            cekSaldo()
-        elif ask == "4":
-            topup()
-        elif ask == "0":
-            break
-        else:
-            print("Maaf input anda invalid, coba untuk input sesuai pilihan yang ada.")
+        for user in dataUser:
+            if user["username"] == username:
+                if user["privilage"] == "free":
+                    print("==============================================================================")
+                    print("|                                                                            |")
+                    print("|                                   SI-FLIX                                  |")
+                    print("|                                  USER-FREE                                 |")
+                    print("|                                                                            |")
+                    print("==============================================================================")
+                    print("|                                                                            |")
+                    print("|                                                                            |")
+                    print("|                                1. Daftar Film                              |")
+                    print("|                                2. Beli Premium                             |")
+                    print("|                                3. Cek Saldo                                |")
+                    print("|                                4. Isi Saldo                                |")
+                    print("|                                0. Keluar                                   |")
+                    print("|                                                                            |")
+                    print("|                                                                            |")
+                    print("==============================================================================")
+                    ask = input("Pilih opsi (1/2/3/0): ")
+                    if ask == "1":
+                        userFree()
+                    elif ask == "2":
+                        premium()
+                    elif ask == "3":
+                        cekSaldo()
+                    elif ask == "4":
+                        topup()
+                    elif ask == "0":
+                        break
+                    else:
+                        print("Maaf input anda invalid, coba untuk input sesuai pilihan yang ada.")
+                if user["privilage"] == "premium":
+                    menuUserPremium()
+                    return
 
 
 
 def userFree():
     while True:
-        clear()
-        daftarFilm()
-        print("Input 0 untuk Keluar")
-        ask = input("Pilih opsi: ")
-        if ask == "1":
+        try:
+            daftarFilm()
+            print("Input 0 untuk Keluar")
             ask = int(input("Pilih ID Film yang ingin dimainkan: "))
-            print("Kamu perlu beralih ke akun premium jika ingin memainkan film.")
-            ask = input("Apakah kamu ingin beralih ke premium? (y/t): ").lower()
-            if ask == "y":
-                return premium()
-            elif ask == "t":
-                clear()
+            if ask == "0":
                 break
+            for i in range(len(film)):
+                if film[i][0] == ask:
+                    print("Kamu perlu beralih ke akun premium jika ingin memainkan film.")
+                    ask = input("Apakah kamu ingin beralih ke premium? (y/t): ").lower()
+                    if ask == "y":
+                        return premium()
+                    elif ask == "t":
+                        return
+                    else:
+                        print("Maaf input anda invalid.")
             else:
-                print("Maaf input anda invalid.")
-        elif ask == "0":
-            break
-        else:
-            print("Maaf input anda invalid.")
+                print("ID Film tidak ditemukan")
+        except:
+            print("Pilih ID film dengan angka")
 
 
 
@@ -651,9 +658,10 @@ while True:
     if ask == "1":
         register()
     elif ask == "2":
+        clear()
         login()
     elif ask == "0":
-        print("--------------------------------Terima Kasih----------------------------------")
+        print("-------------------------Terima Kasih sudah menggunakan aplikasi kami-------------------------")
         break
     else:
         print("Maaf input anda invalid, coba untuk input sesuai pilihan yang ada.")
