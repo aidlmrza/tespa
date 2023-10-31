@@ -181,8 +181,11 @@ def userFree():
                         print("Maaf input anda invalid.")
             else:
                 print("ID Film tidak ditemukan")
-        except:
+        except ValueError:
             print("Pilih ID film dengan angka")
+        except KeyboardInterrupt:
+            print("")
+            continue
 
 
 
@@ -534,134 +537,153 @@ def nontonPremium():
                 print("Maaf ID yang anda pilih tidak ada.\n")
         except ValueError:
             print("Pilih ID dengan menggunakan angka.\n")
+        except KeyboardInterrupt:
+            print("")
 
 
 
 
 def menuAdmin():
     clear()
-    while True:
-        print("==============================================================================")
-        print("|                                                                            |")
-        print("|                                Menu ADMIN                                  |")
-        print("|                             1. Tampilkan Daftar Film                       |")
-        print("|                             2. Tambah Film                                 |")
-        print("|                             3. Ubah Film                                   |")
-        print("|                             4. Hapus Film                                  |")
-        print("|                             0. Keluar                                      |")
-        print("|                                                                            |")
-        print("==============================================================================")
-        pilihan = input("Pilihan Anda: ")
-        if pilihan == "1":
-            daftarFilm()
-        elif pilihan == "2":
-            tambah()
-        elif pilihan == "3":
-            ubah()
-        elif pilihan == "4":
-            Hapus()
-        elif pilihan == "0":
-            print("---Anda berhasil keluar---\n")
-            break
-        else:
-            print("---Pilihan tidak valid, Silakan coba lagi---")
-
+    try:
+        while True:
+            print("==============================================================================")
+            print("|                                                                            |")
+            print("|                                Menu ADMIN                                  |")
+            print("|                             1. Tampilkan Daftar Film                       |")
+            print("|                             2. Tambah Film                                 |")
+            print("|                             3. Ubah Film                                   |")
+            print("|                             4. Hapus Film                                  |")
+            print("|                             0. Keluar                                      |")
+            print("|                                                                            |")
+            print("==============================================================================")
+            pilihan = input("Pilihan Anda: ")
+            if pilihan == "1":
+                daftarFilm()
+            elif pilihan == "2":
+                tambah()
+            elif pilihan == "3":
+                ubah()
+            elif pilihan == "4":
+                Hapus()
+            elif pilihan == "0":
+                print("---Anda berhasil keluar---\n")
+                break
+            else:
+                print("---Pilihan tidak valid, Silakan coba lagi---")
+    except KeyboardInterrupt:
+        print("\nInvalid")
 
 
 
 
 def tambah():
-    while True:
-        IDMaks = max(item[0] for item in film)
-        IDFilm = IDMaks + 1
-        judulFilm = input("Masukkan Nama Film: ").strip()
-        if judulFilm == "":
-            print("Judul Film tidak boleh kosong")
-            continue
-        genre = (input("Masukkan Genre: ")).strip()
-        if genre == "":
-            print("Genre Film tidak boleh kosong")
-            continue
-        tanggalRelease = (input("Masukkan Tanggal Release: ")).strip()
-        if tanggalRelease == "":
-            print("Tanggal release tidak boleh kosong")
-            continue
-        tambahan = [IDFilm, judulFilm, genre, tanggalRelease]
-        film.append(tambahan)
-        with open (json_path_film,"w") as sn:
-            json.dump(film,sn, indent=4)
-        print("------------------------Film berhasil ditambahkan--------------------------")
-        break
-
+    try:
+        while True:
+            IDMaks = max(item[0] for item in film)
+            IDFilm = IDMaks + 1
+            judulFilm = input("Masukkan Nama Film: ").strip()
+            if judulFilm == "":
+                print("Judul Film tidak boleh kosong")
+                continue
+            genre = (input("Masukkan Genre: ")).strip()
+            if genre == "":
+                print("Genre Film tidak boleh kosong")
+                continue
+            tanggalRelease = (input("Masukkan Tanggal Release: ")).strip()
+            if tanggalRelease == "":
+                print("Tanggal release tidak boleh kosong")
+                continue
+            tambahan = [IDFilm, judulFilm, genre, tanggalRelease]
+            film.append(tambahan)
+            with open (json_path_film,"w") as sn:
+                json.dump(film,sn, indent=4)
+            print("------------------------Film berhasil ditambahkan--------------------------")
+            break
+    except KeyboardInterrupt:
+        print("\nInvalid")
 
 
 
 
 def ubah():
-    daftarFilm()
-    IDFilm = int(input("Masukkan No film yang akan diubah: "))
-    for i in range(len(film)):
-        if film[i][0] == IDFilm:
-            judulFilm = input("Masukkan Judul Film baru: ")
-            Genre = input("Masukkan Genre Film baru: ")
-            waktuRelease = input("Masukkan waktu release Film baru: ")
-            film[i][1] = judulFilm
-            film[i][2] = Genre
-            film[i][3] = waktuRelease
-            with open (json_path_film,"w") as sn:
-                json.dump(film,sn, indent=4)
-            print("------------------------Film berhasil ubah--------------------------")
-    else:
-        print("Maaf Perhiasan dengan ID tersebut tidak ditemukan.")
-
+    try:
+        daftarFilm()
+        IDFilm = int(input("Masukkan No film yang akan diubah: ")).strip()
+        for i in range(len(film)):
+            if film[i][0] == IDFilm:
+                judulFilm = input("Masukkan Judul Film baru: ").strip()
+                Genre = input("Masukkan Genre Film baru: ").strip()
+                waktuRelease = input("Masukkan waktu release Film baru: ").strip()
+                film[i][1] = judulFilm
+                film[i][2] = Genre
+                film[i][3] = waktuRelease
+                with open (json_path_film,"w") as sn:
+                    json.dump(film,sn, indent=4)
+                print("------------------------Film berhasil ubah--------------------------")
+        else:
+            print("Maaf Perhiasan dengan ID tersebut tidak ditemukan.")
+    except ValueError:
+        print("ID harus berupa angka")
+    except KeyboardInterrupt:
+        print("\nInvalid")
 
 
 
 
 def Hapus():
-    daftarFilm()
-    IDFilm = int(input("Masukan No Film yang akan dihapus: "))
-    ada = False
-    for i in range(len(film)):
-        if film[i][0] == IDFilm:
-            del film[i]
-            ada = True
-            break
-    if ada:
+    try:
+        daftarFilm()
+        IDFilm = int(input("Masukan No Film yang akan dihapus: ")).strip()
+        ada = False
         for i in range(len(film)):
-            film[i][0] = i + 1
-        with open (json_path_film,"w") as sn:
-            json.dump(film,sn, indent=4)
-        print("------------------------Film berhasil Dihapus--------------------------")
-    else:
-        print("Maaf Film dengan No tersebut tidak ditemukan.")
+            if film[i][0] == IDFilm:
+                del film[i]
+                ada = True
+                break
+        if ada:
+            for i in range(len(film)):
+                film[i][0] = i + 1
+            with open (json_path_film,"w") as sn:
+                json.dump(film,sn, indent=4)
+            print("------------------------Film berhasil Dihapus--------------------------")
+        else:
+            print("Maaf Film dengan No tersebut tidak ditemukan.")
+    except ValueError:
+        print("ID harus berupa angka.")
+    except KeyboardInterrupt:
+        print("\nInvalid")
 
 
 
 
 
 while True:
-    print("==============================================================================")
-    print("|                                                                            |")
-    print("|                                   SI-FLIX                                  |")
-    print("|                                                                            |")
-    print("==============================================================================")
-    print("|                                                                            |")
-    print("|                                                                            |")
-    print("|                                 1. Register                                |")
-    print("|                                 2. Login                                   |")
-    print("|                                 0. Keluar                                  |")
-    print("|                                                                            |")
-    print("|                                                                            |")
-    print("==============================================================================")
-    ask = input("Pilih opsi (1/2/0): ")
-    if ask == "1":
-        register()
-    elif ask == "2":
+    try:
         clear()
-        login()
-    elif ask == "0":
-        print("-------------------------Terima Kasih sudah menggunakan aplikasi kami-------------------------")
-        break
-    else:
-        print("Maaf input anda invalid, coba untuk input sesuai pilihan yang ada.")
+        print("==============================================================================")
+        print("|                                                                            |")
+        print("|                                   SI-FLIX                                  |")
+        print("|                                                                            |")
+        print("==============================================================================")
+        print("|                                                                            |")
+        print("|                                                                            |")
+        print("|                                 1. Register                                |")
+        print("|                                 2. Login                                   |")
+        print("|                                 0. Keluar                                  |")
+        print("|                                                                            |")
+        print("|                                                                            |")
+        print("==============================================================================")
+        ask = input("Pilih opsi (1/2/0): ")
+        if ask == "1":
+            register()
+        elif ask == "2":
+            clear()
+            login()
+        elif ask == "0":
+            print("-------------------------Terima Kasih sudah menggunakan aplikasi kami-------------------------")
+            break
+        else:
+            print("Maaf input anda invalid, coba untuk input sesuai pilihan yang ada.")
+    except KeyboardInterrupt:
+        print("\nInvalid")
