@@ -5,9 +5,9 @@ from prettytable import PrettyTable
 os.system('cls')
 
 
-json_path_film = 'D:/01_CODE/DDP/PraktikumDDP/TESPA/dataData/film.json'
-json_path_admin = 'D:/01_CODE/DDP/PraktikumDDP/TESPA/dataData/admin.json'
-json_path_user = 'D:/01_CODE/DDP/PraktikumDDP/TESPA/dataData/user.json'
+json_path_film = 'C:/Aidil/01_CODING/Semester1/PA/dataData/film.json'
+json_path_admin = 'C:/Aidil/01_CODING/Semester1/PA/dataData/admin.json'
+json_path_user = 'C:/Aidil/01_CODING/Semester1/PA/dataData/user.json'
 
 
 with open(json_path_film,"r") as filmdata:
@@ -27,7 +27,7 @@ def clear():
 
 def daftarFilm():
     table_film = PrettyTable()
-    table_film.field_names =  ["ID","Judul Film","Genre","Waktu Release"]
+    table_film.field_names =  ["ID","Judul Film","Genre","Tanggal Release"]
     for item in film:
         table_film.add_row(item)
     print(table_film)
@@ -49,28 +49,40 @@ def register():
             if username == "":
                 print("Username tidak boleh kosong\n")
                 continue
+            if len(username) > 15:
+                print("Username tidak boleh lebih dari 215")
+                continue
             if all (x.isalpha()for x in username):
                 password = pwinput.pwinput("Masukkan password: ").strip()
                 if password == "":
                     print("Passsword tidak boleh kosong\n")
                     break
-                for admin_acc in admin:
-                    if admin_acc["adminName"].lower() == username:
-                        print("username sudah digunakan cobalagi yang lain")
-                        notAvailable = True
-                        break
-                for user in dataUser:
-                    if user["username"].lower() == username:
-                        print("username sudah digunakan cobalagi yang lain")
-                        notAvailable = True 
-                        break
-                if not notAvailable:
-                    akun_baru = {"username": username, "password": password, "saldo": 0, "privilage": "free"}
-                    dataUser.append(akun_baru)
-                    print("berhasil membuat akun")
-                    with open (json_path_user, "w") as sn:
-                        json.dump(dataUser,sn,indent=4)
+                if len(password) < 8:
+                    print("Password harus lebih dari 8")
                     break
+                if len(password) > 15:
+                    print("Password harus kurang dari 15")
+                    break
+                if all (x.isalnum()for x in password):
+                    for admin_acc in admin:
+                        if admin_acc["adminName"].lower() == username:
+                            print("username sudah digunakan cobalagi yang lain")
+                            notAvailable = True
+                            break
+                    for user in dataUser:
+                        if user["username"].lower() == username:
+                            print("username sudah digunakan cobalagi yang lain")
+                            notAvailable = True 
+                            break
+                    if not notAvailable:
+                        akun_baru = {"username": username, "password": password, "saldo": 0, "privilage": "free"}
+                        dataUser.append(akun_baru)
+                        print("berhasil membuat akun")
+                        with open (json_path_user, "w") as sn:
+                            json.dump(dataUser,sn,indent=4)
+                        break
+                else:
+                    print("Password hanya boleh berupa huruf atau angka")
             else:
                 print("Username hanya bisa mengandung huruf\n")
                 continue
@@ -127,7 +139,6 @@ def login():
 
 
 def menuUserFree():
-    clear()
     while True:
         try:
             for user in dataUser:
@@ -159,7 +170,7 @@ def menuUserFree():
                         elif ask == "4":
                             topup()
                         elif ask == "0":
-                            break
+                            return
                         else:
                             print("Maaf input anda invalid, coba untuk input sesuai pilihan yang ada.")
                     if user["privilage"] == "premium":
@@ -177,7 +188,7 @@ def userFree():
             daftarFilm()
             print("Input 0 untuk Keluar")
             ask = int(input("Pilih ID Film yang ingin dimainkan: "))
-            if ask == "0":
+            if ask == 0:
                 break
             for i in range(len(film)):
                 if film[i][0] == ask:
@@ -189,8 +200,8 @@ def userFree():
                         return
                     else:
                         print("Maaf input anda invalid.")
-            else:
-                print("ID Film tidak ditemukan")
+                else:
+                    print("ID Film tidak ditemukan")
         except ValueError:
             print("Pilih ID film dengan angka")
         except KeyboardInterrupt:
@@ -353,7 +364,6 @@ def premium():
 
 
 def menuUserPremium():
-    clear()
     while True:
         try:
             print("==============================================================================")
@@ -401,7 +411,7 @@ def searchJudul():
                 namaFilm.append(item)
         if namaFilm:
             table_film = PrettyTable()
-            table_film.field_names =  ["ID","Judul Film","Genre","Waktu Release"]
+            table_film.field_names =  ["ID","Judul Film","Genre","Tanggal Release"]
             for item in namaFilm:
                 table_film.add_row(item)
             print("Film yang ditemukan:")
@@ -463,7 +473,7 @@ def searchGenre():
                 namaGenre.append(item)
         if namaGenre:
             table_film = PrettyTable()
-            table_film.field_names =  ["ID","Judul Film","Genre","Waktu Release"]
+            table_film.field_names =  ["ID","Judul Film","Genre","Tanggal Release"]
             for item in namaGenre:
                 table_film.add_row(item)
             print("Film dengan genre yang diinginkan:")
@@ -548,7 +558,6 @@ def nontonPremium():
                     print("||                                                                          ||")
                     print("==============================================================================")
                     input("Enter untuk keluar")
-                    clear()
                     return
             if not filmAda:
                 print("Maaf ID yang anda pilih tidak ada.\n")
@@ -602,15 +611,15 @@ def tambah():
             judulFilm = input("Masukkan Nama Film: ").strip()
             if judulFilm == "":
                 print("Judul Film tidak boleh kosong")
-                continue
+                break
             genre = (input("Masukkan Genre: ")).strip()
             if genre == "":
                 print("Genre Film tidak boleh kosong")
-                continue
+                break
             tanggalRelease = (input("Masukkan Tanggal Release: ")).strip()
             if tanggalRelease == "":
                 print("Tanggal release tidak boleh kosong")
-                continue
+                break
             tambahan = [IDFilm, judulFilm, genre, tanggalRelease]
             film.append(tambahan)
             with open (json_path_film,"w") as sn:
@@ -626,15 +635,27 @@ def tambah():
 def ubah():
     try:
         daftarFilm()
-        IDFilm = int(input("Masukkan No film yang akan diubah: ")).strip()
+        IDFilm = int(input("Masukkan No film yang akan diubah: "))
+        if IDFilm == "":
+            print("ID Film tidak boleh kosong")
+            return
         for i in range(len(film)):
             if film[i][0] == IDFilm:
                 judulFilm = input("Masukkan Judul Film baru: ").strip()
+                if judulFilm == "":
+                    print("Judul Film tidak boleh kosong")
+                    break
                 Genre = input("Masukkan Genre Film baru: ").strip()
-                waktuRelease = input("Masukkan waktu release Film baru: ").strip()
+                if Genre == "":
+                    print("Genre tidak boleh kosong")
+                    break
+                tanggalRelease = input("Masukkan Tanggal release Film baru: ").strip()
+                if tanggalRelease == "":
+                    print("Tanggal Release tidak boleh kosong")
+                    break
                 film[i][1] = judulFilm
                 film[i][2] = Genre
-                film[i][3] = waktuRelease
+                film[i][3] = tanggalRelease
                 with open (json_path_film,"w") as sn:
                     json.dump(film,sn, indent=4)
                 print("------------------------Film berhasil ubah--------------------------")
@@ -651,7 +672,7 @@ def ubah():
 def Hapus():
     try:
         daftarFilm()
-        IDFilm = int(input("Masukan No Film yang akan dihapus: ")).strip()
+        IDFilm = int(input("Masukan No Film yang akan dihapus: "))
         ada = False
         for i in range(len(film)):
             if film[i][0] == IDFilm:
@@ -694,7 +715,6 @@ while True:
         if ask == "1":
             register()
         elif ask == "2":
-            clear()
             login()
         elif ask == "0":
             print("-------------------------Terima Kasih sudah menggunakan aplikasi kami-------------------------")
