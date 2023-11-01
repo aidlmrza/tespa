@@ -2,12 +2,13 @@ import os
 import json
 import pwinput
 from prettytable import PrettyTable
+import getpass
 os.system('cls')
 
 
-json_path_film = 'C:/Aidil/01_CODING/Semester1/PA/dataData/film.json'
-json_path_admin = 'C:/Aidil/01_CODING/Semester1/PA/dataData/admin.json'
-json_path_user = 'C:/Aidil/01_CODING/Semester1/PA/dataData/user.json'
+json_path_film = 'D:/01_CODE/DDP/PraktikumDDP/TESPA/dataData/film.json'
+json_path_admin = 'D:/01_CODE/DDP/PraktikumDDP/TESPA/dataData/admin.json'
+json_path_user = 'D:/01_CODE/DDP/PraktikumDDP/TESPA/dataData/user.json'
 
 
 with open(json_path_film,"r") as filmdata:
@@ -37,7 +38,6 @@ def daftarFilm():
 
 
 def register():
-    clear()
     print("------------------------Silahkan Registrasi-------------------------\n")
     while True:
         try:
@@ -125,11 +125,9 @@ def login():
                             print("\n----------------------Berhasil login sebagai user Premium---------------------")
                             return menuUserPremium()
                     else:
-                        clear()
                         print("Password yang anda masukkan salah")
                         return
             if not akunAda: 
-                clear()
                 print("akun anda tidak dikenal")
                 break
         except KeyboardInterrupt:
@@ -212,7 +210,6 @@ def userFree():
 
 
 def cekSaldo():
-    clear()
     print("==============================================================================")
     print("|                                                                            |")
     print("|                                   Cek Saldo                                |")
@@ -225,10 +222,8 @@ def cekSaldo():
         if user["username"].lower() == username:
             if user["password"] == password:
                 akunAda = True
-                clear()
                 print(f"Saldo anda sekarang: {user['saldo']}""\n")
             else:
-                clear()
                 print("-----------------------Password yang anda masukkan salah----------------------\n")
             break
 
@@ -237,7 +232,6 @@ def cekSaldo():
 
 
 def topup():
-    clear()
     print("==============================================================================")
     print("|                                                                            |")
     print("|                                 Topup Saldo                                |")
@@ -254,7 +248,6 @@ def topup():
                         print(f"Saldo sekarang : {user['saldo']}")
                         topup = int(input("Masukkan jumlah saldo yang ingin diisi: "))
                         if topup < 10000:
-                            clear()
                             print ("minimal topup 10000\n")
                         elif topup > 1000000:
                             print("Maksimal topup 1000000\n")
@@ -268,7 +261,6 @@ def topup():
                     Saldo sekarang {user['saldo']}
                 ==================================================
                 """, file=history)
-                            clear()
                             print("==================================================")
                             print(f"  Berhasil Menambahkan Saldo sebesar {topup}")
                             print(f"  Saldo Sekarang Berjumlah {user['saldo']}")
@@ -276,11 +268,9 @@ def topup():
                             with open (json_path_user, "w") as sn:
                                 json.dump(dataUser, sn, indent=4)
                     else:
-                        clear()
                         print("-----------------------Password yang anda masukkan salah----------------------\n")
                     break
     except ValueError:
-        clear()
         print("Saldo harus berupa angka")
     except KeyboardInterrupt:
         print("\nInvalid") 
@@ -290,7 +280,6 @@ def topup():
 
 #FUNCTION UNTUK BERALIH KE AKUN PREMIUM
 def premium():
-    clear()
     print("==============================================================================")
     print("|                                                                            |")
     print("|                            Beralih Akun Premium                            |")
@@ -312,7 +301,6 @@ def premium():
                             user["saldo"]-=800000
                             with open (json_path_user,"w") as sn:
                                 json.dump(dataUser,sn,indent=4)
-                            clear()
                             print("\n--------Anda berhasil beralih ke akun premium-------\n")
                             with open ("historypembelian.txt","a") as history:
                                 print(f"""
@@ -384,7 +372,6 @@ def menuUserPremium():
             print("==============================================================================")
             ask = input("Pilih opsi: ")
             if ask == "1":
-                clear()
                 daftarFilm()
                 nontonPremium()
             elif ask == "2":
@@ -401,7 +388,6 @@ def menuUserPremium():
 
 
 def searchJudul():
-    clear()
     try:
         cariFilm = input("Masukkan nama film yang ingin Anda cari: ")
         namaFilm = []
@@ -425,7 +411,6 @@ def searchJudul():
                         return
                     for i in range(len(namaFilm)):
                         if namaFilm[i][0] == ask:
-                            clear()
                             filmAda = True
                             print("Memainkan film ")
                             print(f"Judul          : {namaFilm[i][1]}")
@@ -448,8 +433,7 @@ def searchJudul():
                             print("||                                                                          ||")
                             print("||                                                                          ||")
                             print("==============================================================================")
-                            input("Enter untuk keluar")
-                            clear()
+                            getpass.getpass("Enter untuk keluar")
                             return
                     if not filmAda:
                         print("Maaf ID yang anda pilih tidak ada.\n")
@@ -464,7 +448,6 @@ def searchJudul():
 
 def searchGenre():
     try:
-        clear()
         cariGenre = input("Masukkan Genre film yang ingin dicari: ")
         namaGenre = []
         for item in film:
@@ -487,7 +470,6 @@ def searchGenre():
                         return
                     for i in range(len(namaGenre)):
                         if namaGenre[i][0] == ask:
-                            clear()
                             filmAda = True
                             print("Memainkan film ")
                             print(f"Judul          : {namaGenre[i][1]}")
@@ -510,8 +492,7 @@ def searchGenre():
                             print("||                                                                          ||")
                             print("||                                                                          ||")
                             print("==============================================================================")
-                            input("Enter untuk keluar")
-                            clear()
+                            getpass.getpass("Enter untuk keluar")
                             return
                     if not filmAda:
                         print("Maaf ID yang anda pilih tidak ada.\n")
@@ -525,16 +506,15 @@ def searchGenre():
 
 
 def nontonPremium():
-    while True:
-        filmAda = False
-        try:
+    filmAda = False
+    try:
+        while True:
             print("0 untuk keluar")
             ask = int(input("Pilih ID Film: "))
             if ask == 0:
-                break
+                return
             for i in range(len(film)):
                 if film[i][0] == ask:
-                    clear()
                     filmAda = True
                     print("Memainkan film ")
                     print(f"Judul          : {film[i][1]}")
@@ -557,20 +537,19 @@ def nontonPremium():
                     print("||                                                                          ||")
                     print("||                                                                          ||")
                     print("==============================================================================")
-                    input("Enter untuk keluar")
+                    getpass.getpass("Enter untuk keluar")
                     return
             if not filmAda:
                 print("Maaf ID yang anda pilih tidak ada.\n")
-        except ValueError:
-            print("Pilih ID dengan menggunakan angka.\n")
-        except KeyboardInterrupt:
-            print("\nInvalid")
+    except ValueError:
+        print("Pilih ID dengan menggunakan angka.\n")
+    except KeyboardInterrupt:
+        print("\nInvalid")
 
 
 
 
 def menuAdmin():
-    clear()
     try:
         while True:
             print("==============================================================================")
