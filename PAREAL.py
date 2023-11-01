@@ -20,6 +20,7 @@ with open(json_path_user,"r") as userdata:
 
 
 
+
 def clear():
     os.system('cls')
 
@@ -209,75 +210,6 @@ def userFree():
 
 
 
-def cekSaldo():
-    print("==============================================================================")
-    print("|                                                                            |")
-    print("|                                   Cek Saldo                                |")
-    print("|                                                                            |")
-    print("==============================================================================")
-    print(f"Username: {username}")
-    password = pwinput.pwinput("Masukkan Password: ")
-    akunAda = False
-    for user in dataUser:
-        if user["username"].lower() == username:
-            if user["password"] == password:
-                akunAda = True
-                print(f"Saldo anda sekarang: {user['saldo']}""\n")
-            else:
-                print("-----------------------Password yang anda masukkan salah----------------------\n")
-            break
-
-
-
-
-
-def topup():
-    print("==============================================================================")
-    print("|                                                                            |")
-    print("|                                 Topup Saldo                                |")
-    print("|                                                                            |")
-    print("==============================================================================")
-    print(f"Username: {username}")
-    password = pwinput.pwinput("Masukkan Password: ")
-    akunAda = False
-    try:
-        for user in dataUser:
-                if user["username"].lower() == username:
-                    if user["password"] == password:
-                        akunAda = True
-                        print(f"Saldo sekarang : {user['saldo']}")
-                        topup = int(input("Masukkan jumlah saldo yang ingin diisi: "))
-                        if topup < 10000:
-                            print ("minimal topup 10000\n")
-                        elif topup > 1000000:
-                            print("Maksimal topup 1000000\n")
-                        else:
-                            user["saldo"]+=topup
-                            with open ("historytopup.txt","a") as history:
-                                print(f"""
-                ==================================================
-                    Username : {user['username']}
-                    Berhasil Menambahkan Saldo sebesar {topup}
-                    Saldo sekarang {user['saldo']}
-                ==================================================
-                """, file=history)
-                            print("==================================================")
-                            print(f"  Berhasil Menambahkan Saldo sebesar {topup}")
-                            print(f"  Saldo Sekarang Berjumlah {user['saldo']}")
-                            print("==================================================\n")
-                            with open (json_path_user, "w") as sn:
-                                json.dump(dataUser, sn, indent=4)
-                    else:
-                        print("-----------------------Password yang anda masukkan salah----------------------\n")
-                    break
-    except ValueError:
-        print("Saldo harus berupa angka")
-    except KeyboardInterrupt:
-        print("\nInvalid") 
-
-
-
-
 #FUNCTION UNTUK BERALIH KE AKUN PREMIUM
 def premium():
     print("==============================================================================")
@@ -351,6 +283,75 @@ def premium():
 
 
 
+def cekSaldo():
+    print("==============================================================================")
+    print("|                                                                            |")
+    print("|                                   Cek Saldo                                |")
+    print("|                                                                            |")
+    print("==============================================================================")
+    print(f"Username: {username}")
+    password = pwinput.pwinput("Masukkan Password: ")
+    akunAda = False
+    for user in dataUser:
+        if user["username"].lower() == username:
+            if user["password"] == password:
+                akunAda = True
+                print(f"Saldo anda sekarang: {user['saldo']}""\n")
+            else:
+                print("-----------------------Password yang anda masukkan salah----------------------\n")
+            break
+
+
+
+
+
+def topup():
+    print("==============================================================================")
+    print("|                                                                            |")
+    print("|                                 Topup Saldo                                |")
+    print("|                                                                            |")
+    print("==============================================================================")
+    print(f"Username: {username}")
+    password = pwinput.pwinput("Masukkan Password: ")
+    akunAda = False
+    try:
+        for user in dataUser:
+                if user["username"].lower() == username:
+                    if user["password"] == password:
+                        akunAda = True
+                        print(f"Saldo sekarang : {user['saldo']}")
+                        topup = int(input("Masukkan jumlah saldo yang ingin diisi: "))
+                        if topup < 10000:
+                            print ("minimal topup 10000\n")
+                        elif topup > 1000000:
+                            print("Maksimal topup 1000000\n")
+                        else:
+                            user["saldo"]+=topup
+                            with open ("historytopup.txt","a") as history:
+                                print(f"""
+                ==================================================
+                    Username : {user['username']}
+                    Berhasil Menambahkan Saldo sebesar {topup}
+                    Saldo sekarang {user['saldo']}
+                ==================================================
+                """, file=history)
+                            print("==================================================")
+                            print(f"  Berhasil Menambahkan Saldo sebesar {topup}")
+                            print(f"  Saldo Sekarang Berjumlah {user['saldo']}")
+                            print("==================================================\n")
+                            with open (json_path_user, "w") as sn:
+                                json.dump(dataUser, sn, indent=4)
+                    else:
+                        print("-----------------------Password yang anda masukkan salah----------------------\n")
+                    break
+    except ValueError:
+        print("Saldo harus berupa angka")
+    except KeyboardInterrupt:
+        print("\nInvalid") 
+
+
+
+
 def menuUserPremium():
     while True:
         try:
@@ -384,6 +385,54 @@ def menuUserPremium():
                 print("Maaf input anda invalid, coba untuk input sesuai pilihan yang ada.")
         except KeyboardInterrupt:
             print("\nInvalid")
+
+
+
+
+
+def nontonPremium():
+    filmAda = False
+    try:
+        while True:
+            print("0 untuk keluar")
+            ask = int(input("Pilih ID Film: "))
+            if ask == 0:
+                return
+            for i in range(len(film)):
+                if film[i][0] == ask:
+                    filmAda = True
+                    print("Menayangkan film ")
+                    print(f"Judul          : {film[i][1]}")
+                    print(f"Genre          : {film[i][2]}")
+                    print(f"Tanggal Tayang : {film[i][3]}")
+                    print("==============================================================================")
+                    print("||                                                                          ||")
+                    print("||                                                                          ||")
+                    print("||                                                                          ||")
+                    print("||                                                                          ||")
+                    print("||                               ||=====                                    ||")
+                    print("||                               ||   =====                                 ||")
+                    print("||                               ||      =====                              ||")
+                    print("||                               ||         =====                           ||")
+                    print("||                               ||      =====                              ||")
+                    print("||                               ||   =====                                 ||")
+                    print("||                               ||=====                                    ||")
+                    print("||                                                                          ||")
+                    print("||                                                                          ||")
+                    print("||                                                                          ||")
+                    print("||                                                                          ||")
+                    print("==============================================================================")
+                    getpass.getpass("Enter untuk keluar")
+                    return
+            if not filmAda:
+                print("Maaf ID yang anda pilih tidak ada.\n")
+    except ValueError:
+        print("Pilih ID dengan menggunakan angka.\n")
+    except KeyboardInterrupt:
+        print("\nInvalid")
+
+
+
 
 
 
@@ -421,13 +470,13 @@ def searchJudul():
                             print("||                                                                          ||")
                             print("||                                                                          ||")
                             print("||                                                                          ||")
-                            print("||                                                                          ||")
-                            print("||                               ||        ||                               ||")
-                            print("||                               ||        ||                               ||")
-                            print("||                               ||        ||                               ||")
-                            print("||                               ||        ||                               ||")
-                            print("||                               ||        ||                               ||")
-                            print("||                                                                          ||")
+                            print("||                               ||=====                                    ||")
+                            print("||                               ||   =====                                 ||")
+                            print("||                               ||      =====                              ||")
+                            print("||                               ||         =====                           ||")
+                            print("||                               ||      =====                              ||")
+                            print("||                               ||   =====                                 ||")
+                            print("||                               ||=====                                    ||")
                             print("||                                                                          ||")
                             print("||                                                                          ||")
                             print("||                                                                          ||")
@@ -443,6 +492,9 @@ def searchJudul():
             print("Film tidak ditemukan.\n")
     except KeyboardInterrupt:
         print("\nInvalid") 
+
+
+
 
 
 
@@ -480,13 +532,13 @@ def searchGenre():
                             print("||                                                                          ||")
                             print("||                                                                          ||")
                             print("||                                                                          ||")
-                            print("||                                                                          ||")
-                            print("||                               ||        ||                               ||")
-                            print("||                               ||        ||                               ||")
-                            print("||                               ||        ||                               ||")
-                            print("||                               ||        ||                               ||")
-                            print("||                               ||        ||                               ||")
-                            print("||                                                                          ||")
+                            print("||                               ||=====                                    ||")
+                            print("||                               ||   =====                                 ||")
+                            print("||                               ||      =====                              ||")
+                            print("||                               ||         =====                           ||")
+                            print("||                               ||      =====                              ||")
+                            print("||                               ||   =====                                 ||")
+                            print("||                               ||=====                                    ||")
                             print("||                                                                          ||")
                             print("||                                                                          ||")
                             print("||                                                                          ||")
@@ -505,46 +557,7 @@ def searchGenre():
 
 
 
-def nontonPremium():
-    filmAda = False
-    try:
-        while True:
-            print("0 untuk keluar")
-            ask = int(input("Pilih ID Film: "))
-            if ask == 0:
-                return
-            for i in range(len(film)):
-                if film[i][0] == ask:
-                    filmAda = True
-                    print("Memainkan film ")
-                    print(f"Judul          : {film[i][1]}")
-                    print(f"Genre          : {film[i][2]}")
-                    print(f"Tanggal Tayang : {film[i][3]}")
-                    print("==============================================================================")
-                    print("||                                                                          ||")
-                    print("||                                                                          ||")
-                    print("||                                                                          ||")
-                    print("||                                                                          ||")
-                    print("||                                                                          ||")
-                    print("||                               ||        ||                               ||")
-                    print("||                               ||        ||                               ||")
-                    print("||                               ||        ||                               ||")
-                    print("||                               ||        ||                               ||")
-                    print("||                               ||        ||                               ||")
-                    print("||                                                                          ||")
-                    print("||                                                                          ||")
-                    print("||                                                                          ||")
-                    print("||                                                                          ||")
-                    print("||                                                                          ||")
-                    print("==============================================================================")
-                    getpass.getpass("Enter untuk keluar")
-                    return
-            if not filmAda:
-                print("Maaf ID yang anda pilih tidak ada.\n")
-    except ValueError:
-        print("Pilih ID dengan menggunakan angka.\n")
-    except KeyboardInterrupt:
-        print("\nInvalid")
+
 
 
 
