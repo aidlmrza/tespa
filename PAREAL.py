@@ -21,11 +21,6 @@ with open(json_path_user,"r") as userdata:
 
 
 
-def clear():
-    os.system('cls')
-
-
-
 
 def daftarFilm():
     table_film = PrettyTable()
@@ -59,10 +54,10 @@ def register():
                     print("Passsword tidak boleh kosong\n")
                     break
                 if len(password) < 8:
-                    print("Password harus lebih dari 8")
+                    print("Password minimal 8")
                     break
                 if len(password) > 15:
-                    print("Password harus kurang dari 15")
+                    print("Password maksimal 15")
                     break
                 if all (x.isalnum()for x in password):
                     for admin_acc in admin:
@@ -98,7 +93,6 @@ def register():
 def login():
     global username
     print("---------------------------Silahkan Login---------------------------\n")
-
     while True:
         try:
             username = input("Masukkan username: ").lower().strip()
@@ -163,7 +157,7 @@ def menuUserFree():
                         if ask == "1":
                             userFree()
                         elif ask == "2":
-                            premium()
+                            beliPremium()
                         elif ask == "3":
                             cekSaldo()
                         elif ask == "4":
@@ -211,7 +205,7 @@ def userFree():
 
 
 #FUNCTION UNTUK BERALIH KE AKUN PREMIUM
-def premium():
+def beliPremium():
     print("==============================================================================")
     print("|                                                                            |")
     print("|                            Beralih Akun Premium                            |")
@@ -282,7 +276,6 @@ def premium():
 
 
 
-
 def cekSaldo():
     print("==============================================================================")
     print("|                                                                            |")
@@ -291,16 +284,13 @@ def cekSaldo():
     print("==============================================================================")
     print(f"Username: {username}")
     password = pwinput.pwinput("Masukkan Password: ")
-    akunAda = False
     for user in dataUser:
         if user["username"].lower() == username:
             if user["password"] == password:
-                akunAda = True
                 print(f"Saldo anda sekarang: {user['saldo']}""\n")
             else:
                 print("-----------------------Password yang anda masukkan salah----------------------\n")
-            break
-
+                return
 
 
 
@@ -628,9 +618,6 @@ def ubah():
     try:
         daftarFilm()
         IDFilm = int(input("Masukkan No film yang akan diubah: "))
-        if IDFilm == "":
-            print("ID Film tidak boleh kosong")
-            return
         for i in range(len(film)):
             if film[i][0] == IDFilm:
                 judulFilm = input("Masukkan Judul Film baru: ").strip()
