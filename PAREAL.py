@@ -32,6 +32,36 @@ def daftarFilm():
 
 
 
+def mainMenu():
+    while True:
+        try:
+            print("==============================================================================")
+            print("|                                                                            |")
+            print("|                                   SI-FLIX                                  |")
+            print("|                                                                            |")
+            print("==============================================================================")
+            print("|                                                                            |")
+            print("|                                                                            |")
+            print("|                                 1. Register                                |")
+            print("|                                 2. Login                                   |")
+            print("|                                 0. Keluar                                  |")
+            print("|                                                                            |")
+            print("|                                                                            |")
+            print("==============================================================================")
+            ask = input("Pilih opsi (1/2/0): ")
+            if ask == "1":
+                register()
+            elif ask == "2":
+                login()
+            elif ask == "0":
+                print("-------------------------Terima Kasih sudah menggunakan aplikasi kami-------------------------")
+                break
+            else:
+                print("Maaf input anda invalid, coba untuk input sesuai pilihan yang ada.")
+        except KeyboardInterrupt:
+            print("\nInvalid Input")
+
+
 
 def register():
     print("------------------------Silahkan Registrasi-------------------------\n")
@@ -48,7 +78,7 @@ def register():
             if len(username) > 15:
                 print("Username tidak boleh lebih dari 215")
                 continue
-            if all (x.isalpha()for x in username):
+            if all (x.isalnum()for x in username):
                 password = pwinput.pwinput("Masukkan password: ").strip()
                 if password == "":
                     print("Passsword tidak boleh kosong\n")
@@ -78,13 +108,12 @@ def register():
                             json.dump(dataUser,sn,indent=4)
                         break
                 else:
-                    print("Password hanya boleh berupa huruf atau angka")
+                    print("Password hanya bisa mengandung huruf dan angka")
             else:
-                print("Username hanya bisa mengandung huruf\n")
+                print("Username hanya bisa mengandung huruf dan angka\n")
                 continue
         except KeyboardInterrupt:
-            print("\nInvalid")
-
+            print("\nInvalid Input")
 
 
 
@@ -126,7 +155,8 @@ def login():
                 print("akun anda tidak dikenal")
                 break
         except KeyboardInterrupt:
-            print("\nInvalid")
+            print("\nInvalid Input")
+
 
 
 
@@ -170,7 +200,7 @@ def menuUserFree():
                         menuUserPremium()
                         return
         except KeyboardInterrupt:
-            print("\nInvalid")
+            print("\nInvalid Input")
 
 
 
@@ -268,7 +298,7 @@ def beliPremium():
                     elif bayar == "t":
                         break
                     else:
-                        print("Invalid")
+                        print("\nInvalid Input")
                 else:
                     print("Password yang anda masukkan salah")
                 break
@@ -303,7 +333,6 @@ def topup():
     print("==============================================================================")
     print(f"Username: {username}")
     password = pwinput.pwinput("Masukkan Password: ")
-    akunAda = False
     try:
         for user in dataUser:
                 if user["username"].lower() == username:
@@ -337,7 +366,7 @@ def topup():
     except ValueError:
         print("Saldo harus berupa angka")
     except KeyboardInterrupt:
-        print("\nInvalid") 
+        print("\nInvalid Input")
 
 
 
@@ -374,7 +403,7 @@ def menuUserPremium():
             else:
                 print("Maaf input anda invalid, coba untuk input sesuai pilihan yang ada.")
         except KeyboardInterrupt:
-            print("\nInvalid")
+            print("\nInvalid Input")
 
 
 
@@ -419,7 +448,7 @@ def nontonPremium():
     except ValueError:
         print("Pilih ID dengan menggunakan angka.\n")
     except KeyboardInterrupt:
-        print("\nInvalid")
+        print("\nInvalid Input")
 
 
 
@@ -481,7 +510,7 @@ def searchJudul():
         else:
             print("Film tidak ditemukan.\n")
     except KeyboardInterrupt:
-        print("\nInvalid") 
+        print("\nInvalid Input")
 
 
 
@@ -543,7 +572,7 @@ def searchGenre():
         else:
             print("Genre tidak ditemukan.\n")
     except KeyboardInterrupt:
-        print("\nInvalid")
+        print("\nInvalid Input")
 
 
 
@@ -580,7 +609,7 @@ def menuAdmin():
             else:
                 print("---Pilihan tidak valid, Silakan coba lagi---")
     except KeyboardInterrupt:
-        print("\nInvalid")
+        print("\nInvalid Input")
 
 
 
@@ -609,7 +638,7 @@ def tambah():
             print("------------------------Film berhasil ditambahkan--------------------------")
             break
     except KeyboardInterrupt:
-        print("\nInvalid")
+        print("\nInvalid Input")
 
 
 
@@ -643,7 +672,7 @@ def ubah():
     except ValueError:
         print("ID harus berupa angka")
     except KeyboardInterrupt:
-        print("\nInvalid")
+        print("\nInvalid Input")
 
 
 
@@ -669,36 +698,11 @@ def Hapus():
     except ValueError:
         print("ID harus berupa angka.")
     except KeyboardInterrupt:
-        print("\nInvalid")
+        print("\nInvalid Input")
 
 
 
 
 
-while True:
-    try:
-        print("==============================================================================")
-        print("|                                                                            |")
-        print("|                                   SI-FLIX                                  |")
-        print("|                                                                            |")
-        print("==============================================================================")
-        print("|                                                                            |")
-        print("|                                                                            |")
-        print("|                                 1. Register                                |")
-        print("|                                 2. Login                                   |")
-        print("|                                 0. Keluar                                  |")
-        print("|                                                                            |")
-        print("|                                                                            |")
-        print("==============================================================================")
-        ask = input("Pilih opsi (1/2/0): ")
-        if ask == "1":
-            register()
-        elif ask == "2":
-            login()
-        elif ask == "0":
-            print("-------------------------Terima Kasih sudah menggunakan aplikasi kami-------------------------")
-            break
-        else:
-            print("Maaf input anda invalid, coba untuk input sesuai pilihan yang ada.")
-    except KeyboardInterrupt:
-        print("\nInvalid")
+
+mainMenu()
