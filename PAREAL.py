@@ -21,7 +21,7 @@ with open(json_path_user,"r") as userdata:
 
 
 
-
+#fungsi yang digunakan untuk mengkonversi data film dalam json menjadi pretty tabble
 def daftarFilm():
     table_film = PrettyTable()
     table_film.field_names =  ["ID","Judul Film","Genre","Tanggal Release"]
@@ -31,7 +31,7 @@ def daftarFilm():
 
 
 
-
+#menu utama untuk user membuat akun atau login, dan admin untuk login
 def mainMenu():
     while True:
         try:
@@ -48,12 +48,12 @@ def mainMenu():
             print("|                                                                            |")
             print("|                                                                            |")
             print("==============================================================================")
-            ask = input("Pilih opsi (1/2/0): ")
-            if ask == "1":
+            opsi = input("Pilih opsi (1/2/0): ")
+            if opsi == "1":
                 register()
-            elif ask == "2":
+            elif opsi == "2":
                 login()
-            elif ask == "0":
+            elif opsi == "0":
                 print("-------------------------Terima Kasih sudah menggunakan aplikasi kami-------------------------")
                 break
             else:
@@ -63,8 +63,9 @@ def mainMenu():
 
 
 
+#fungsi buat user jika ingin membuat akun baru
 def register():
-    print("------------------------Silahkan Registrasi-------------------------\n")
+    print("\n------------------------Silahkan Registrasi-------------------------")
     while True:
         try:
             notAvailable = False
@@ -76,7 +77,7 @@ def register():
                 print("Username tidak boleh kosong\n")
                 continue
             if len(username) > 15:
-                print("Username tidak boleh lebih dari 215")
+                print("Username tidak boleh lebih dari 15 karakter")
                 continue
             if all (x.isalnum()for x in username):
                 password = pwinput.pwinput("Masukkan password: ").strip()
@@ -84,10 +85,10 @@ def register():
                     print("Passsword tidak boleh kosong\n")
                     break
                 if len(password) < 8:
-                    print("Password minimal 8")
+                    print("Password minimal 8 karakter")
                     break
                 if len(password) > 15:
-                    print("Password maksimal 15")
+                    print("Password maksimal 15 karakter")
                     break
                 if all (x.isalnum()for x in password):
                     for admin_acc in admin:
@@ -114,14 +115,15 @@ def register():
                 continue
         except KeyboardInterrupt:
             print("\nInvalid Input")
+        except EOFError:
+            print("\nInvalid Input")
 
 
 
-
-#FUNCTION UNTUK LOGIN
+#fungsi untuk user ataupun admin jika ingin login
 def login():
     global username
-    print("---------------------------Silahkan Login---------------------------\n")
+    print("\n---------------------------Silahkan Login---------------------------")
     while True:
         try:
             username = input("Masukkan username: ").lower().strip()
@@ -156,11 +158,12 @@ def login():
                 break
         except KeyboardInterrupt:
             print("\nInvalid Input")
+        except EOFError:
+            print("\nInvalid Input")
 
 
 
-
-
+#fungsi yang memuat menu utama ketika login sebagai user free
 def menuUserFree():
     while True:
         try:
@@ -183,43 +186,44 @@ def menuUserFree():
                         print("|                                                                            |")
                         print("|                                                                            |")
                         print("==============================================================================")
-                        ask = input("Pilih opsi (1/2/3/0): ")
-                        if ask == "1":
+                        opsi = input("Pilih opsi (1/2/3/0): ")
+                        if opsi == "1":
                             userFree()
-                        elif ask == "2":
+                        elif opsi == "2":
                             beliPremium()
-                        elif ask == "3":
+                        elif opsi == "3":
                             cekSaldo()
-                        elif ask == "4":
+                        elif opsi == "4":
                             topup()
-                        elif ask == "0":
+                        elif opsi == "0":
                             return
                         else:
                             print("Maaf input anda invalid, coba untuk input sesuai pilihan yang ada.")
                     if user["privilage"] == "premium":
-                        menuUserPremium()
-                        return
+                        return menuUserPremium()
+                        
         except KeyboardInterrupt:
+            print("\nInvalid Input")
+        except EOFError:
             print("\nInvalid Input")
 
 
-
-
+#fungsi yang memuat jika user free ingin melihat daftar film dan menonton
 def userFree():
     while True:
         try:
             daftarFilm()
             print("Input 0 untuk Keluar")
-            ask = int(input("Pilih ID Film yang ingin dimainkan: "))
-            if ask == 0:
+            opsi = int(input("Pilih ID Film yang ingin dimainkan: "))
+            if opsi == 0:
                 break
             for i in range(len(film)):
-                if film[i][0] == ask:
-                    print("Kamu perlu beralih ke akun premium jika ingin memainkan film.")
-                    ask = input("Apakah kamu ingin beralih ke premium? (y/t): ").lower()
-                    if ask == "y":
-                        return premium()
-                    elif ask == "t":
+                if film[i][0] == opsi:
+                    print("Kamu perlu beralih ke akun premium jika ingin menayangkan film.")
+                    opsi = input("Apakah kamu ingin beralih ke premium? (y/t): ").lower()
+                    if opsi == "y":
+                        return beliPremium()
+                    elif opsi == "t":
                         return
                     else:
                         print("Maaf input anda invalid.")
@@ -228,103 +232,111 @@ def userFree():
         except ValueError:
             print("Pilih ID film dengan angka")
         except KeyboardInterrupt:
-            print("")
-            continue
+            print("\nInvalid Input")
+        except EOFError:
+            print("\nInvalid Input")
 
 
-
-
-#FUNCTION UNTUK BERALIH KE AKUN PREMIUM
+#fungsi untuk user free jika ingin beralih ke akun premium
 def beliPremium():
-    print("==============================================================================")
-    print("|                                                                            |")
-    print("|                            Beralih Akun Premium                            |")
-    print("|                                                                            |")
-    print("==============================================================================")
-    print(f"Username: {username}")
-    password = pwinput.pwinput("Masukkan Password: ")
-    for user in dataUser:
+    try:
+        print("==============================================================================")
+        print("|                                                                            |")
+        print("|                            Beralih Akun Premium                            |")
+        print("|                                                                            |")
+        print("==============================================================================")
+        print(f"Username: {username}")
+        password = pwinput.pwinput("Masukkan Password: ")
+        for user in dataUser:
+                if user["username"].lower() == username:
+                    if user["password"] == password:
+                        bayar = input("Apakah kamu ingin beralih ke akun premium dengan harga Rp800.000? (y/t): ").lower()
+                        if bayar == "y":
+                            if user["saldo"] < 800000:
+                                getpass.getpass(f"Saldo anda tidak mencukupi, saldo anda sisa {user['saldo']}, silahkan isi saldo terlebih dahulu (enter) ").lower()
+                                return topup()
+                            elif user["saldo"] >= 800000:
+                                saldoAwal = user["saldo"]
+                                user["privilage"] = "premium"
+                                user["saldo"]-=800000
+                                with open (json_path_user,"w") as sn:
+                                    json.dump(dataUser,sn,indent=4)
+                                print("\n--------Anda berhasil beralih ke akun premium-------\n")
+                                with open ("historypembelian.txt","a") as history:
+                                    print(f"""
+            =====================================================
+
+                                SI-FLIX INVOICE              
+
+            =====================================================
+
+                Username : {user['username']}
+                Upgrade Premium Account           800.000    
+
+            -----------------------------------------------------
+
+                Total                             800000    
+                Saldo Awal                        {saldoAwal}   
+                -------------------------------------------
+                Saldo Sisa                        {user['saldo']}
+
+            -----------------------------------------------------
+            """,file=history)
+                                print("====================================================")
+                                print("                                                    ")
+                                print("                  SI-FLIX INVOICE                   ")
+                                print("                                                    ")
+                                print("====================================================")
+                                print("                                                    ")
+                                print("  Upgrade Premium Account           800.000 ")
+                                print("                                                    ")
+                                print("----------------------------------------------------")
+                                print("                                                    ")
+                                print("  Total                             800000    ")
+                                print(f"  Saldo Awal                        {saldoAwal}    ")
+                                print("  -------------------------------------------")
+                                print(f"  Saldo Sisa                        {user['saldo']}")
+                                print("                                                    ")
+                                print("----------------------------------------------------")
+                                break
+                        elif bayar == "t":
+                            break
+                        else:
+                            print("\nInvalid Input")
+                    else:
+                        print("Password yang anda masukkan salah")
+                    break
+    except EOFError:
+        print("Invalid Input\n")
+    except KeyboardInterrupt:
+        print("Invalid Input\n")
+
+
+#fungsi jika user ingin mengecek saldo yang ada
+def cekSaldo():
+    try:
+        print("==============================================================================")
+        print("|                                                                            |")
+        print("|                                   Cek Saldo                                |")
+        print("|                                                                            |")
+        print("==============================================================================")
+        print(f"Username: {username}")
+        password = pwinput.pwinput("Masukkan Password: ")
+        for user in dataUser:
             if user["username"].lower() == username:
                 if user["password"] == password:
-                    bayar = input("Apakah kamu ingin beralih ke akun premium dengan harga Rp800.000? (y/t): ").lower()
-                    if bayar == "y":
-                        if user["saldo"] < 800000:
-                            input(f"Saldo anda tidak mencukupi, saldo anda sisa {user['saldo']}, silahkan isi saldo terlebih dahulu (enter) ").lower()
-                            return topup()
-                        elif user["saldo"] >= 800000:
-                            saldoAwal = user["saldo"]
-                            user["privilage"] = "premium"
-                            user["saldo"]-=800000
-                            with open (json_path_user,"w") as sn:
-                                json.dump(dataUser,sn,indent=4)
-                            print("\n--------Anda berhasil beralih ke akun premium-------\n")
-                            with open ("historypembelian.txt","a") as history:
-                                print(f"""
-        =====================================================
-
-                            SI-FLIX INVOICE              
-
-        =====================================================
-
-            Username : {user['username']}
-            Upgrade Premium Account           800.000    
-
-        -----------------------------------------------------
-
-            Total                             800000    
-            Saldo Awal                        {saldoAwal}   
-            -------------------------------------------
-            Saldo Sisa                        {user['saldo']}
-
-        -----------------------------------------------------
-        """,file=history)
-                            print("====================================================")
-                            print("                                                    ")
-                            print("                  SI-FLIX INVOICE                   ")
-                            print("                                                    ")
-                            print("====================================================")
-                            print("                                                    ")
-                            print("  Upgrade Premium Account           800.000 ")
-                            print("                                                    ")
-                            print("----------------------------------------------------")
-                            print("                                                    ")
-                            print("  Total                             800000    ")
-                            print(f"  Saldo Awal                        {saldoAwal}    ")
-                            print("  -------------------------------------------")
-                            print(f"  Saldo Sisa                        {user['saldo']}")
-                            print("                                                    ")
-                            print("----------------------------------------------------")
-                            break
-                    elif bayar == "t":
-                        break
-                    else:
-                        print("\nInvalid Input")
+                    print(f"Saldo anda sekarang: {user['saldo']}""\n")
                 else:
-                    print("Password yang anda masukkan salah")
-                break
+                    print("-----------------------Password yang anda masukkan salah----------------------\n")
+                    return
+    except EOFError:
+        print("Invalid Input\n")
+    except KeyboardInterrupt:
+        print("Invalid Input\n")
 
 
 
-
-def cekSaldo():
-    print("==============================================================================")
-    print("|                                                                            |")
-    print("|                                   Cek Saldo                                |")
-    print("|                                                                            |")
-    print("==============================================================================")
-    print(f"Username: {username}")
-    password = pwinput.pwinput("Masukkan Password: ")
-    for user in dataUser:
-        if user["username"].lower() == username:
-            if user["password"] == password:
-                print(f"Saldo anda sekarang: {user['saldo']}""\n")
-            else:
-                print("-----------------------Password yang anda masukkan salah----------------------\n")
-                return
-
-
-
-
+#fungsi untuk user free melakukan topup/isi saldo
 def topup():
     print("==============================================================================")
     print("|                                                                            |")
@@ -366,11 +378,13 @@ def topup():
     except ValueError:
         print("Saldo harus berupa angka")
     except KeyboardInterrupt:
-        print("\nInvalid Input")
+        print("Invalid Input\n")
+    except EOFError:
+        print("Invalid Input\n")
 
 
 
-
+#fungsi yang memuat menu utama user premium
 def menuUserPremium():
     while True:
         try:
@@ -390,35 +404,36 @@ def menuUserPremium():
             print("|                                                                            |")
             print("|                                                                            |")
             print("==============================================================================")
-            ask = input("Pilih opsi: ")
-            if ask == "1":
+            opsi = input("Pilih opsi: ")
+            if opsi == "1":
                 daftarFilm()
                 nontonPremium()
-            elif ask == "2":
+            elif opsi == "2":
                 searchJudul()
-            elif ask == "3":
+            elif opsi == "3":
                 searchGenre()
-            elif ask == "0":
+            elif opsi == "0":
                 break
             else:
                 print("Maaf input anda invalid, coba untuk input sesuai pilihan yang ada.")
         except KeyboardInterrupt:
-            print("\nInvalid Input")
+            print("Invalid Input\n")
+        except EOFError:
+            print("Invalid Input\n")
 
 
 
-
-
+#fungsi untuk user premium jika ingin menampilkan seluruh daftar film dan menonton
 def nontonPremium():
     filmAda = False
     try:
         while True:
             print("0 untuk keluar")
-            ask = int(input("Pilih ID Film: "))
-            if ask == 0:
+            opsi = int(input("Pilih ID Film: "))
+            if opsi == 0:
                 return
             for i in range(len(film)):
-                if film[i][0] == ask:
+                if film[i][0] == opsi:
                     filmAda = True
                     print("Menayangkan film ")
                     print(f"Judul          : {film[i][1]}")
@@ -448,13 +463,14 @@ def nontonPremium():
     except ValueError:
         print("Pilih ID dengan menggunakan angka.\n")
     except KeyboardInterrupt:
-        print("\nInvalid Input")
+        print("Invalid Input\n")
+    except EOFError:
+        print("Invalid Input\n")
 
 
 
 
-
-
+#fungsi untuk user premium jika ingin mencari judul film dan menonton film
 def searchJudul():
     try:
         cariFilm = input("Masukkan nama film yang ingin Anda cari: ")
@@ -474,13 +490,13 @@ def searchJudul():
             while True:
                 try:
                     print("0 untuk keluar")
-                    ask = int(input("Pilih ID Film: "))
-                    if ask == 0:
+                    opsi = int(input("Pilih ID Film: "))
+                    if opsi == 0:
                         return
                     for i in range(len(namaFilm)):
-                        if namaFilm[i][0] == ask:
+                        if namaFilm[i][0] == opsi:
                             filmAda = True
-                            print("Memainkan film ")
+                            print("menayangkan film ")
                             print(f"Judul          : {namaFilm[i][1]}")
                             print(f"Genre          : {namaFilm[i][2]}")
                             print(f"Tanggal Tayang : {namaFilm[i][3]}")
@@ -510,13 +526,14 @@ def searchJudul():
         else:
             print("Film tidak ditemukan.\n")
     except KeyboardInterrupt:
-        print("\nInvalid Input")
+        print("Invalid Input\n")
+    except EOFError:
+        print("Invalid Input\n")
 
 
 
 
-
-
+#fungsi untuk user premium jika ingin mencari film dengan genre tertentu dan menontonnya
 def searchGenre():
     try:
         cariGenre = input("Masukkan Genre film yang ingin dicari: ")
@@ -536,13 +553,13 @@ def searchGenre():
             while True:
                 try:
                     print("0 untuk keluar")
-                    ask = int(input("Pilih ID Film: "))
-                    if ask == 0:
+                    opsi = int(input("Pilih ID Film: "))
+                    if opsi == 0:
                         return
                     for i in range(len(namaGenre)):
-                        if namaGenre[i][0] == ask:
+                        if namaGenre[i][0] == opsi:
                             filmAda = True
-                            print("Memainkan film ")
+                            print("menayangkan film ")
                             print(f"Judul          : {namaGenre[i][1]}")
                             print(f"Genre          : {namaGenre[i][2]}")
                             print(f"Tanggal Tayang : {namaGenre[i][3]}")
@@ -572,15 +589,12 @@ def searchGenre():
         else:
             print("Genre tidak ditemukan.\n")
     except KeyboardInterrupt:
-        print("\nInvalid Input")
+        print("Invalid Input\n")
+    except EOFError:
+        print("Invalid Input\n")
 
 
-
-
-
-
-
-
+#fungsi yang memuat menu utama dari admin
 def menuAdmin():
     try:
         while True:
@@ -609,11 +623,13 @@ def menuAdmin():
             else:
                 print("---Pilihan tidak valid, Silakan coba lagi---")
     except KeyboardInterrupt:
-        print("\nInvalid Input")
+        print("Invalid Input\n")
+    except EOFError:
+        print("Invalid Input\n")
 
 
 
-
+#fungsi jika admin ingin menambahkan film baru ke dalam database
 def tambah():
     try:
         while True:
@@ -638,11 +654,12 @@ def tambah():
             print("------------------------Film berhasil ditambahkan--------------------------")
             break
     except KeyboardInterrupt:
-        print("\nInvalid Input")
+        print("Invalid Input\n")
+    except EOFError:
+        print("Invalid Input\n")
 
 
-
-
+#fungsi jika admin ingin mengubah data film yang ada pada database
 def ubah():
     try:
         daftarFilm()
@@ -667,16 +684,19 @@ def ubah():
                 with open (json_path_film,"w") as sn:
                     json.dump(film,sn, indent=4)
                 print("------------------------Film berhasil ubah--------------------------")
+                return
         else:
-            print("Maaf Perhiasan dengan ID tersebut tidak ditemukan.")
+            print("Maaf Film dengan ID tersebut tidak ditemukan.")
     except ValueError:
         print("ID harus berupa angka")
     except KeyboardInterrupt:
-        print("\nInvalid Input")
+        print("Invalid Input\n")
+    except EOFError:
+        print("Invalid Input\n")
 
 
 
-
+#fungsi jika admin ingin menghapus film dari database
 def Hapus():
     try:
         daftarFilm()
@@ -698,11 +718,9 @@ def Hapus():
     except ValueError:
         print("ID harus berupa angka.")
     except KeyboardInterrupt:
-        print("\nInvalid Input")
+        print("Invalid Input\n")
+    except EOFError:
+        print("Invalid Input\n")
 
-
-
-
-
-
+#memanggil menu utama untuk menjalankan program
 mainMenu()
